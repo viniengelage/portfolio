@@ -83,10 +83,10 @@ export function Contact() {
               VE
             </Link>
             <p>
-              © {year} {AUTHOR.name} · Feito no Brasil
+              © {year} {AUTHOR.name} · Feito com carinho
             </p>
           </div>
-          <p className="footer__colophon">Desenhado no Penpot, construído em Next.js</p>
+          {/*<p className="footer__colophon">Desenhado no Penpot, construído em Next.js</p>*/}
         </footer>
       </div>
     </section>

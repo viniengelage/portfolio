@@ -858,8 +858,11 @@ svg {
     will-change: auto;
   }
 
-  /* o único movimento que sobrevivia ao interruptor geral */
-  .writing__post:hover .writing__title {
+  /* os únicos movimentos que sobreviviam ao interruptor geral: sem transição
+     eles não suavizam, saltam — melhor não acontecerem. O risco do e-mail
+     continua aparecendo, só que instantâneo: ainda comunica o estado. */
+  .writing__post:hover .writing__title,
+  .contact__email:hover svg {
     transform: none;
   }
 }
