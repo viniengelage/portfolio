@@ -122,7 +122,12 @@
   --stagger: 60ms; /* passo padrão de escalonamento */
 
   /* --- layout */
-  --shell: 1200px;
+  /* Fluida como a escala de tipo, sem breakpoint: 1200px até 1600px de
+     viewport, subindo para 1520px até 3200px. Numa ultrawide a coluna fixa de
+     1200px vira uma tira perdida no meio da tela. O aumento é contido de
+     propósito — o que cresce é o respiro entre as colunas, não o comprimento
+     da linha, que segue limitado por `--measure` e pelos max-width locais. */
+  --shell: clamp(1200px, calc(1200px + (100vw - 1600px) / 5), 1520px);
   --gutter: var(--space-6);
   --measure: 760px;
 }
@@ -223,6 +228,15 @@ svg {
 
 .band {
   position: relative;
+  /* Distância da borda do viewport até a coluna de conteúdo — o mesmo cálculo
+     que `.shell` faz para se centralizar.
+
+     Todo elemento decorativo (bloom, sinais, fantasmas) ancora nisto em vez de
+     em % do viewport. Em 1440px a diferença é nenhuma, porque a coluna quase
+     encosta nas bordas; em ultrawide o conteúdo fica no meio e a decoração
+     ancorada no viewport órfã a mais de mil pixels dele. */
+  --content-inset: max(var(--gutter), calc((100% - var(--shell)) / 2));
+
   padding-block: clamp(var(--space-20), 9vw, var(--space-32));
   isolation: isolate;
 }

@@ -9,9 +9,14 @@
   overflow: hidden;
 }
 
+/* Os offsets abaixo partem de `--content-inset` (ver .band em globals.css) e
+   não do viewport: em ultrawide o conteúdo fica centralizado e um bloom preso
+   à borda ficaria a mais de mil pixels do texto que deveria iluminar.
+   Os valores reproduzem a posição atual em 1440px; abaixo de 1080px o bloco
+   responsivo devolve as porcentagens, onde as duas referências coincidem. */
 .hero__bloom {
   top: 12%;
-  left: -4%;
+  left: calc(var(--content-inset) - 176px);
   width: min(700px, 90vw);
   height: 420px;
 }
@@ -411,7 +416,7 @@
 .writing__pilcrow {
   position: absolute;
   z-index: -1;
-  right: -40px;
+  right: calc(var(--content-inset) - 160px);
   bottom: -80px;
   color: var(--accent);
   font-size: 260px;
@@ -424,7 +429,7 @@
   position: absolute;
   z-index: -1;
   bottom: var(--space-10);
-  left: var(--gutter);
+  left: calc(var(--content-inset) - 96px);
   display: grid;
   gap: var(--space-4);
   width: min(340px, 40vw);
@@ -511,7 +516,7 @@
 
 .contact__bloom {
   top: -18%;
-  left: 24%;
+  left: calc(var(--content-inset) + 224px);
   width: min(900px, 96vw);
   height: 460px;
   opacity: 0.26;
@@ -521,7 +526,7 @@
   position: absolute;
   z-index: -1;
   top: 58%;
-  left: clamp(var(--gutter), 22%, 380px);
+  left: calc(var(--content-inset) + 196px);
   pointer-events: none;
 }
 
@@ -650,6 +655,29 @@
    RESPONSIVO
    ============================================================ */
 @media (max-width: 1080px) {
+  /* Abaixo da largura do shell a coluna encosta nas guias, então `--content-inset`
+     colapsa no gutter e os offsets acima empurrariam o cenário para fora da
+     tela. Aqui as referências em porcentagem do viewport voltam a valer. */
+  .hero__bloom {
+    left: -4%;
+  }
+
+  .contact__bloom {
+    left: 24%;
+  }
+
+  .contact__signals {
+    left: clamp(var(--gutter), 22%, 380px);
+  }
+
+  .writing__ghost {
+    left: var(--gutter);
+  }
+
+  .writing__pilcrow {
+    right: -40px;
+  }
+
   .hero__grid {
     grid-template-columns: 1fr;
     gap: var(--space-12);
