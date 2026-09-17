@@ -10,46 +10,58 @@ type Entry = {
   current?: boolean;
 };
 
-/** PLACEHOLDER: 2020–2022, 2018–2020 e 2016 aguardam os dados reais. */
 const entries: Entry[] = [
   {
     year: "2024 — hoje",
-    current: true,
-    role: "Produto próprio",
-    org: "Organizadin · Bússola",
-    description:
-      "Desenho e construo dois produtos do zero: interface, design system, app e backend. É onde o full stack e o design finalmente moram no mesmo lugar.",
-    tags: ["React Native", "Design System", "Node", "LLM"],
-  },
-  {
-    year: "2022 — 2024",
-    role: "Desenvolvedor",
+    role: "Software Engineer",
     org: "Trix Investimentos",
     orgAccent: "var(--accent-trix)",
     description:
-      "PLACEHOLDER — descrever o que você fez no Trix: app de investimentos em FIIs e ações, carteiras, simulador, onboarding.",
-    tags: ["React Native", "TypeScript", "Fintech"],
+      "Desenvolvedor principal do aplicativo. Migrei a arquitetura legada para o ecossistema Expo — com atualização OTA, que tirou a correção de bug da fila da loja — e reescrevi o serviço de API. O trabalho de maior alcance foi o design system novo: desenhado do zero e adotado na migração de todos os componentes legados.",
+    tags: ["Expo", "React Native", "TypeScript", "React Query"],
+    current: true,
+  },
+  {
+    year: "2024 — hoje",
+    role: "Founder",
+    org: "Organizadin",
+    orgAccent: "var(--accent-organizadin)",
+    description:
+      "App de organização financeira pessoal com Open Finance. Planejei, desenhei e construí sozinho — da primeira anotação à publicação nas lojas, passando pelo design system, pelo app e pelo backend.",
+    tags: [
+      "TypeScript",
+      "Expo",
+      "React Native",
+      "Design System",
+      "Node",
+      "NestJS",
+      "PostgreSQL",
+      "Open Finance",
+    ],
+  },
+  {
+    year: "2023 — 2024",
+    role: "Software Engineer",
+    org: "Tree ID",
+    description:
+      "Responsável técnico de um CRM de agendamento para clínicas de saúde. Conduzi o produto de ponta a ponta: do design à API, e daí à manutenção em produção.",
+    tags: ["TypeScript", "React"],
+  },
+  {
+    year: "2022 — 2023",
+    role: "Software Engineer",
+    org: "MbLabs",
+    description:
+      "Plataforma de leilões online. Implementei novas funcionalidades e ajudei a construir o design system que passou a padronizar a interface entre o app e a web.",
+    tags: ["TypeScript", "React Native", "React"],
   },
   {
     year: "2020 — 2022",
-    role: "PLACEHOLDER — cargo",
-    org: "PLACEHOLDER — empresa",
+    role: "Software Engineer",
+    org: "BraPay",
     description:
-      "PLACEHOLDER — uma linha sobre o que mudou nessa fase: que problema você resolvia e o que aprendeu.",
-    tags: ["PLACEHOLDER"],
-  },
-  {
-    year: "2018 — 2020",
-    role: "PLACEHOLDER — cargo",
-    org: "PLACEHOLDER — empresa",
-    description: "PLACEHOLDER — uma linha sobre o que mudou nessa fase.",
-    tags: ["PLACEHOLDER"],
-  },
-  {
-    year: "2016",
-    role: "Primeira linha em produção",
-    description:
-      "PLACEHOLDER — como começou. Vale contar a origem: o que te puxou pra programação e pro design.",
+      "Onde comecei, como estagiário. Primeiro num app de delivery de comida — geolocalização, WebSockets para acompanhar o pedido em tempo real e o design system, que criei e mantive. Depois numa plataforma de criptomoedas, com a mesma stack.",
+    tags: ["TypeScript", "React Native", "React", "Node", "Express"],
   },
 ];
 
@@ -64,8 +76,8 @@ export function Timeline() {
           </div>
           <div className="section-head__aside">
             <p>
-              Uma década indo do backend para a interface — e descobrindo que o lugar mais
-              interessante é no meio dos dois.
+              Seis anos entre a engenharia e o design — e descobrindo que o lugar mais interessante
+              é exatamente no meio dos dois.
             </p>
           </div>
         </Reveal>
@@ -73,7 +85,7 @@ export function Timeline() {
         <ol className="timeline">
           {entries.map((entry, index) => (
             <Reveal
-              key={entry.year}
+              key={index}
               as="li"
               delay={index * 60}
               className={`timeline__item${entry.current ? " timeline__item--now" : ""}`}
