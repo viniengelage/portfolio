@@ -33,3 +33,7 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # Finder (MacOS) folder config
 .DS_Store
+
+# assets de marca: as fontes são baixadas pelo brand/render.ts
+brand/.fonts
+brand/.render.png

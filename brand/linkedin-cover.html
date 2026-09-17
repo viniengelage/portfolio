@@ -1,0 +1,168 @@
+<!doctype html>
+<!--
+  Fonte editável da capa de LinkedIn. Renderize com:
+    bun run brand:cover     (ver package.json)
+
+  Canvas 1584×396 — a medida que o LinkedIn pede para perfil pessoal.
+
+  ZONAS SEGURAS (por isso a composição é deslocada para a direita):
+  · a foto de perfil cobre o canto inferior esquerdo, ~x 100–260 / y 200–396
+  · no mobile o LinkedIn corta as laterais, sobrando mais ou menos o miolo
+  Conclusão: nada de texto antes de x=400 nem depois de x=1200.
+-->
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: "Inter Tight";
+        font-weight: 700;
+        src: url("./.fonts/InterTight-Bold.ttf") format("truetype");
+      }
+      @font-face {
+        font-family: "Inter Tight";
+        font-weight: 600;
+        src: url("./.fonts/InterTight-SemiBold.ttf") format("truetype");
+      }
+      @font-face {
+        font-family: "Instrument Serif";
+        font-style: italic;
+        font-weight: 400;
+        src: url("./.fonts/InstrumentSerif-Italic.ttf") format("truetype");
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        font-weight: 500;
+        src: url("./.fonts/JetBrainsMono-Medium.ttf") format("truetype");
+      }
+
+      /* mesmos tokens de app/globals.css — a capa tem que parecer o site */
+      :root {
+        --bg-base: #08070c;
+        --text-primary: #edeaf5;
+        --text-secondary: #9c96ae;
+        --accent-bright: #c084fc;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* O Chrome headless não entrega um viewport de exatamente 396px, então o
+         render sai mais alto e é cortado depois. O `sips` só corta pelo CENTRO
+         (ele ignora --cropOffset), por isso a capa é centrada aqui: assim o
+         corte central cai exatamente em cima dela. */
+      body {
+        display: grid;
+        /* altura fixa, não 100vh: o viewport do headless não é confiável, e se a
+           página variar de altura o corte central sai deslocado */
+        height: 600px;
+        background: #08070c;
+        place-items: center;
+      }
+
+      .cover {
+        position: relative;
+        width: 1584px;
+        height: 396px;
+        overflow: hidden;
+        background: var(--bg-base);
+      }
+
+      /* a grade blueprint do hero, na mesma célula de 64px */
+      .grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(to right, rgb(255 255 255 / 3.5%) 1px, transparent 1px),
+          linear-gradient(to bottom, rgb(255 255 255 / 3.5%) 1px, transparent 1px);
+        background-size: 64px 64px;
+      }
+
+      /* o bloom fica à esquerda de propósito: é onde a foto de perfil entra,
+         então ela cai dentro de um halo em vez de num vazio */
+      .bloom {
+        position: absolute;
+        top: -160px;
+        left: -140px;
+        width: 780px;
+        height: 620px;
+        background: radial-gradient(circle, rgb(126 34 206 / 48%) 0%, rgb(8 7 12 / 0%) 70%);
+      }
+
+      .bloom--far {
+        top: auto;
+        right: -220px;
+        bottom: -260px;
+        left: auto;
+        width: 720px;
+        height: 560px;
+        background: radial-gradient(circle, rgb(109 40 217 / 30%) 0%, rgb(8 7 12 / 0%) 70%);
+      }
+
+      .content {
+        position: absolute;
+        top: 50%;
+        left: 400px;
+        transform: translateY(-50%);
+      }
+
+      .line {
+        color: var(--text-primary);
+        font-family: "Inter Tight", sans-serif;
+        font-size: 52px;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1.16;
+      }
+
+      .line em {
+        color: var(--accent-bright);
+        font-family: "Instrument Serif", serif;
+        font-size: 56px;
+        font-style: italic;
+        font-weight: 400;
+        /* a serifada tem métrica bem diferente da sans: sem isso ela senta alto */
+        letter-spacing: 0;
+      }
+
+      /* 17px porque o LinkedIn exibe a capa por volta de 1128px de largura —
+         uma redução de ~0.71×. A 14px esta linha chegava ilegrível na tela. */
+      .meta {
+        margin-top: 30px;
+        color: var(--text-secondary);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 17px;
+        font-weight: 500;
+        letter-spacing: 0.2em;
+      }
+
+      /* mais para dentro do que a margem óbvia: o LinkedIn corta as laterais no
+         mobile, e encostada na borda a marca seria a primeira coisa a sumir */
+      .mark {
+        position: absolute;
+        top: 50%;
+        right: 220px;
+        height: 200px;
+        transform: translateY(-50%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cover">
+      <div class="grid"></div>
+      <div class="bloom"></div>
+      <div class="bloom bloom--far"></div>
+
+      <div class="content">
+        <p class="line">Código que sustenta,</p>
+        <p class="line">interface que <em>respira.</em></p>
+        <p class="meta">FULL STACK · APP &amp; INTERFACE</p>
+      </div>
+
+      <img class="mark" src="../public/logo-mark.svg" alt="" />
+    </div>
+  </body>
+</html>
