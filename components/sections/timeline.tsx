@@ -17,7 +17,7 @@ const entries: Entry[] = [
     org: "Trix Investimentos",
     orgAccent: "var(--accent-trix)",
     description:
-      "Desenvolvedor principal do aplicativo. Migrei a arquitetura legada para o ecossistema Expo — com atualização OTA, que tirou a correção de bug da fila da loja — e reescrevi o serviço de API. O trabalho de maior alcance foi o design system novo: desenhado do zero e adotado na migração de todos os componentes legados.",
+      "Desenvolvedor principal do aplicativo. Migrei a arquitetura legada para o ecossistema Expo com atualização OTA, que tirou a correção de bug da fila da loja e reescrevi o serviço de API. O trabalho de maior alcance foi o design system novo: desenhado do zero e adotado na migração de todos os componentes legados.",
     tags: ["Expo", "React Native", "TypeScript", "React Query"],
     current: true,
   },
@@ -27,7 +27,7 @@ const entries: Entry[] = [
     org: "Organizadin",
     orgAccent: "var(--accent-organizadin)",
     description:
-      "App de organização financeira pessoal com Open Finance. Planejei, desenhei e construí sozinho — da primeira anotação à publicação nas lojas, passando pelo design system, pelo app e pelo backend.",
+      "App de organização financeira pessoal com Open Finance. Planejei, desenhei e construí sozinhoda primeira anotação à publicação nas lojas, passando pelo design system, pelo app e pelo backend.",
     tags: [
       "TypeScript",
       "Expo",
@@ -60,7 +60,7 @@ const entries: Entry[] = [
     role: "Software Engineer",
     org: "BraPay",
     description:
-      "Onde comecei, como estagiário. Primeiro num app de delivery de comida — geolocalização, WebSockets para acompanhar o pedido em tempo real e o design system, que criei e mantive. Depois numa plataforma de criptomoedas, com a mesma stack.",
+      "Onde comecei, como estagiário. Primeiro num app de delivery de comida: geolocalização, WebSockets para acompanhar o pedido em tempo real e o design system, que criei e mantive. Depois numa plataforma de criptomoedas, com a mesma stack.",
     tags: ["TypeScript", "React Native", "React", "Node", "Express"],
   },
 ];

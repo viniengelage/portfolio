@@ -93,7 +93,7 @@ export const AUTHOR = {
   name: "Vinicios Engelage",
   initials: "VE",
   role: "Full stack · app & interface",
-  bio: "PLACEHOLDER — Desenvolvedor full stack focado em aplicativos e design de interface. Escrevo sobre as decisões que sobrevivem ao deploy.",
+  bio: "Desenvolvedor full stack focado em aplicativos e design de interface. Escrevo sobre as decisões que sobrevivem ao deploy.",
   links: [
     { label: "GitHub", href: "https://github.com/viniengelage" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/viniengelage" },

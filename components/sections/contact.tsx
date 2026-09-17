@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
+import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { AUTHOR } from "../../lib/posts";
 import { Reveal } from "../reveal";
@@ -6,17 +6,11 @@ import { Reveal } from "../reveal";
 const socials = [
   { label: "GitHub", href: "https://github.com/viniengelage" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/viniengelage/" },
-  { label: "X", href: "https://x.com/viniengelage" },
   { label: "Instagram", href: "https://instagram.com/viniengelage" },
 ];
 
-// PLACEHOLDER: confirmar o e-mail de contato
 const email = "oi@viniengelage.com";
 
-/**
- * Fixo de propósito: com Cache Components ligado, `new Date()` em
- * Server Component quebra o prerender por ser valor instável.
- */
 const year = 2026;
 
 export function Contact() {
@@ -61,7 +55,7 @@ export function Contact() {
         <Reveal delay={240}>
           <a className="contact__email" href={`mailto:${email}`}>
             {email}
-            <ArrowUpRight weight="bold" aria-hidden="true" />
+            <ArrowUpRightIcon weight="bold" aria-hidden="true" />
           </a>
         </Reveal>
 
@@ -86,7 +80,6 @@ export function Contact() {
               © {year} {AUTHOR.name} · Feito com carinho
             </p>
           </div>
-          {/*<p className="footer__colophon">Desenhado no Penpot, construído em Next.js</p>*/}
         </footer>
       </div>
     </section>

@@ -13,7 +13,7 @@
          .mk__float   card de vidro, posicionado em relação ao RIG (nunca rotaciona)
      .mk__badge     selo "mockup ilustrativo" (fora do stage: nunca escala)
 
-   Modificadores: .mk--organizadin | .mk--bussola | .mk--trix
+   Modificadores: .mk--organizadin | .mk--bussola | .mk--trix | .mk--polar-dark
    O card pai injeta a cor via --project-accent.
    ============================================================ */
 
@@ -766,6 +766,188 @@
 /* ============================================================
    8. MOVIMENTO — tudo opt-in, só transform/opacity/stroke-dashoffset
    ============================================================ */
+/* ============================================================
+   6. POLAR DARK — editor desktop, sem device móvel
+   ============================================================ */
+.mk--polar-dark {
+  min-height: 480px;
+}
+
+.mk--polar-dark .mk__stage {
+  display: grid;
+  place-items: center;
+  padding: var(--space-8);
+}
+
+.mk-pol__window {
+  width: min(680px, 100%);
+  overflow: hidden;
+  border: 1px solid var(--ink-700);
+  border-radius: var(--radius-panel);
+  background: var(--ink-900);
+  box-shadow: 0 30px 72px -24px rgb(0 0 0 / 80%), 0 0 64px -28px var(--violet-800);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.mk-pol__titlebar,
+.mk-pol__status {
+  display: flex;
+  align-items: center;
+  height: 28px;
+  padding-inline: var(--space-3);
+  background: var(--ink-850);
+  color: var(--ink-400);
+}
+
+.mk-pol__titlebar {
+  justify-content: center;
+  position: relative;
+}
+
+.mk-pol__traffic {
+  position: absolute;
+  left: var(--space-3);
+  display: flex;
+  gap: 5px;
+}
+
+.mk-pol__traffic i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ink-600);
+}
+
+.mk-pol__traffic i:first-child { background: var(--rose-400); }
+.mk-pol__traffic i:nth-child(2) { background: var(--amber-400); }
+.mk-pol__traffic i:last-child { background: var(--lime-300); }
+
+.mk-pol__body {
+  display: grid;
+  grid-template-columns: 32px 124px 1fr;
+  min-height: 276px;
+}
+
+.mk-pol__activity,
+.mk-pol__sidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+.mk-pol__activity {
+  align-items: center;
+  gap: var(--space-4);
+  padding-top: var(--space-4);
+  border-right: 1px solid var(--ink-700);
+  background: var(--ink-850);
+  color: var(--ink-400);
+  font-size: 13px;
+}
+
+.mk-pol__activity span:first-child { color: var(--violet-400); }
+
+.mk-pol__sidebar {
+  gap: 5px;
+  padding: var(--space-3) var(--space-2);
+  border-right: 1px solid var(--ink-700);
+  background: var(--ink-850);
+  color: var(--ink-300);
+}
+
+.mk-pol__sidebar p {
+  margin-bottom: var(--space-2);
+  color: var(--ink-400);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+}
+
+.mk-pol__sidebar strong {
+  margin-bottom: var(--space-1);
+  color: var(--ink-200);
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.mk-pol__file { padding-left: var(--space-3); }
+
+.mk-pol__file--active {
+  margin-inline: calc(var(--space-2) * -1);
+  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-5);
+  background: var(--ink-600);
+  color: var(--ink-100);
+}
+
+.mk-pol__editor { min-width: 0; }
+
+.mk-pol__tab {
+  height: 31px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: var(--space-3);
+  border-bottom: 1px solid var(--ink-700);
+  background: var(--ink-900);
+  color: var(--ink-200);
+}
+
+.mk-pol__tab span { color: var(--ink-400); }
+
+.mk-pol__code {
+  min-height: 150px;
+  padding-block: var(--space-4);
+}
+
+.mk-pol__line {
+  display: block;
+  min-height: 15px;
+  white-space: pre;
+}
+
+.mk-pol__line i {
+  display: inline-block;
+  width: 29px;
+  margin-right: var(--space-3);
+  color: var(--ink-600);
+  font-style: normal;
+  text-align: right;
+}
+
+.mk-pol__kw { color: var(--violet-400); font-weight: 500; }
+.mk-pol__fn { color: var(--blue-400); font-weight: 500; }
+.mk-pol__violet { color: var(--teal-400); font-weight: 500; }
+.mk-pol__param { color: var(--ink-100); font-weight: 400; font-style: italic; }
+.mk-pol__pun { color: var(--ink-400); font-weight: 400; }
+.mk-pol__comment { color: var(--ink-400); font-weight: 400; font-style: italic; }
+
+.mk-pol__terminal {
+  padding: var(--space-3);
+  border-top: 1px solid var(--ink-700);
+  background: var(--ink-900);
+  color: var(--ink-200);
+}
+
+.mk-pol__terminal-title { color: var(--violet-400); font-size: 8px; }
+.mk-pol__terminal p { margin-top: var(--space-1); }
+.mk-pol__terminal p b { color: var(--lime-300); }
+.mk-pol__terminal p em { color: var(--ink-100); font-style: normal; }
+.mk-pol__terminal p span { color: var(--lime-300); }
+
+.mk-pol__status {
+  justify-content: space-between;
+  background: var(--violet-800);
+  color: var(--ink-100);
+  font-size: 8px;
+}
+
+@media (max-width: 520px) {
+  .mk--polar-dark .mk__stage { padding: var(--space-4); }
+  .mk-pol__body { grid-template-columns: 28px 1fr; }
+  .mk-pol__sidebar { display: none; }
+  .mk-pol__window { font-size: 9px; }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   /* pulso do passo ativo da Bússola — loop, roda independente da viewport */
   .mk-bus__node--active::after {

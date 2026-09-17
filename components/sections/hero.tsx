@@ -1,7 +1,6 @@
 import { BlueprintGrid } from "../blueprint-grid";
 import { Reveal } from "../reveal";
 
-/** Posições em interseções livres de texto da grade de 64px. */
 const nodes = [
   { left: "31%", top: "15%", dur: "2.4s" },
   { left: "62%", top: "8%", dur: "3.6s" },
@@ -18,7 +17,7 @@ const stats = [
 const profile = [
   ["local", "Foz do Iguaçu · BR"],
   ["fuso", "GMT−3"],
-  ["stack", "TypeScript · React Native · Node"],
+  ["stack", "TypeScript · React · IA · Node"],
   ["foco", "Mobile e Web"],
 ];
 
@@ -47,7 +46,7 @@ export function Hero() {
           <Reveal delay={160}>
             <p className="hero__lead">
               Desenvolvedor full stack com especialidade em aplicativos e design de interface.
-              Construo produtos do schema do banco ao detalhe de animação — e cuido especialmente do
+              Construo produtos do schema do banco ao detalhe de animação. E cuido especialmente do
               detalhe.
             </p>
           </Reveal>

@@ -1,6 +1,7 @@
-import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
+import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { BussolaMockup } from "../mockups/bussola";
 import { OrganizadinMockup } from "../mockups/organizadin";
+import { PolarDarkMockup } from "../mockups/polar-dark";
 import { TrixMockup } from "../mockups/trix";
 import { Reveal } from "../reveal";
 
@@ -19,6 +20,19 @@ type Project = {
 };
 
 const projects: Project[] = [
+  {
+    mark: "Polar Dark",
+    period: "open source",
+    accent: "var(--accent)",
+    title: "Um tema escuro feito para deixar o código respirar",
+    description:
+      "Tema para VS Code e Zed construído a partir de um sistema de design real. Cinco cores de sintaxe, superfícies com viés violeta e a rampa ANSI completa mantêm o editor focado no código.",
+    role: "Direção visual · Mapeamento de tokens de interface e sintaxe · Port para VS Code e Zed",
+    stack: ["VS Code", "Zed", "JSON", "Design system"],
+    url: "github.com/viniengelage/polaris-theme",
+    href: "https://github.com/viniengelage/polaris-theme",
+    mockup: <PolarDarkMockup />,
+  },
   {
     mark: "Organizadin",
     period: "em produção",
@@ -67,7 +81,7 @@ export function Work() {
       <div className="shell band__inner">
         <Reveal className="section-head">
           <div className="section-head__title">
-            <p className="label">Selected work</p>
+            <p className="label">Meus projetos</p>
             <h2>Produtos que estão no ar</h2>
           </div>
           <div className="section-head__aside">
@@ -117,7 +131,7 @@ export function Work() {
                     rel="noreferrer"
                   >
                     {project.url}
-                    <ArrowUpRight weight="bold" aria-hidden="true" />
+                    <ArrowUpRightIcon weight="bold" aria-hidden="true" />
                   </a>
                 </div>
               </div>

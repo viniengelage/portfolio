@@ -1,4 +1,4 @@
-import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { formatPostDate, getAllPosts } from "../../lib/posts";
 import { Reveal } from "../reveal";
@@ -8,7 +8,6 @@ export function Writing() {
 
   return (
     <section className="band writing" id="blog">
-      {/* a escrita antes de existir */}
       <span className="writing__pilcrow editorial" aria-hidden="true">
         ¶
       </span>
@@ -21,13 +20,12 @@ export function Writing() {
       <div className="shell band__inner">
         <Reveal className="section-head">
           <div className="section-head__title">
-            <p className="label">Escrita</p>
-            <h2>Notas de quem constrói</h2>
+            <p className="label">Blog</p>
+            <h2>Compartilhando o que aprendi</h2>
           </div>
           <div className="section-head__aside">
             <p>
-              Comecei a escrever sobre o que aprendo construindo produto — decisões de arquitetura,
-              detalhes de interface e os erros que custaram caro.
+              Comecei a escrever para documentar e compartilhar o que aprendi. Acertando ou errando.
             </p>
           </div>
         </Reveal>
@@ -47,7 +45,7 @@ export function Writing() {
         <Reveal delay={200}>
           <Link href="/blog" className="link-arrow writing__all">
             Ver todos os posts
-            <ArrowRight weight="bold" aria-hidden="true" />
+            <ArrowRightIcon weight="bold" aria-hidden="true" />
           </Link>
         </Reveal>
       </div>
