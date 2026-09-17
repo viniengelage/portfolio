@@ -1,22 +1,24 @@
 /**
- * Fonte de dados do blog.
+ * Fonte de dados do blog: arquivos markdown em `content/blog`.
  *
- * ---------------------------------------------------------------------------
- * PONTO DE TROCA (MDX / markdown)
- * ---------------------------------------------------------------------------
+ * Um post = um arquivo `.md`. O nome do arquivo é o slug, o frontmatter é o
+ * `PostMeta` e o corpo é traduzido para `ContentNode[]` por `lib/markdown.ts`.
  * Todo o resto do blog só conhece `getAllPosts()`, `getPostBySlug()` e
- * `getFeaturedPost()`. Para trocar a fonte:
+ * `getFeaturedPost()` — nada abaixo desta camada sabe que existe markdown.
  *
- *   1. mantenha `PostMeta` como frontmatter dos arquivos `.mdx`;
- *   2. troque `sources` por um loader (`import.meta.glob`, `fs` + gray-matter,
- *      contentlayer, etc.) que devolva `PostSource[]`;
- *   3. troque `content: ContentNode[]` por o componente compilado do MDX e
- *      renderize com `mdxComponents` (`components/blog/mdx.tsx`) — o mapa de
- *      componentes já está no formato que o MDX espera;
- *   4. `derivePost()` continua calculando wordCount/readingMinutes/headings.
+ * Frontmatter inteiro falha alto: campo faltando, `date` fora de YYYY-MM-DD ou
+ * `pattern`/`accent` fora do enum quebram o build com o nome do arquivo na
+ * mensagem. O objetivo é nunca publicar um card silenciosamente quebrado.
  *
- * O único lugar marcado como "TROCAR AQUI" abaixo é o array `sources`.
+ * Se um dia o conteúdo precisar de componentes React embutidos, o caminho é
+ * MDX: `derivePost()` continua válido, mas `headings` e `wordCount` teriam de
+ * ser extraídos por plugin de remark, já que um componente compilado não é
+ * inspecionável como a AST atual.
  */
+
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { type Frontmatter, parseFrontmatter, parseMarkdown } from "./markdown";
 
 export const SITE_URL = "https://www.viniengelage.com";
 
@@ -74,6 +76,8 @@ export type PostMeta = {
   pattern: PostPattern;
   accent: PostAccent;
   featured?: boolean;
+  /** Fica fora do build de produção; continua visível em `next dev`. */
+  draft?: boolean;
 };
 
 /** O que o loader precisa devolver. Tudo o mais é derivado. */
@@ -148,435 +152,81 @@ export function derivePost(source: PostSource): Post {
   };
 }
 
+
 /* ------------------------------------------------------------------ */
-/* Conteúdo mockado                                                    */
+/* Fonte: arquivos markdown em content/blog                            */
 /* ------------------------------------------------------------------ */
 
-/** SVG inline para não depender de asset nenhum enquanto o texto é placeholder. */
-const placeholderFigure = `data:image/svg+xml,${encodeURIComponent(
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect width="1200" height="600" fill="#0e0d14"/><rect x="1" y="1" width="1198" height="598" fill="none" stroke="#1f1c2b" stroke-width="2"/><circle cx="600" cy="300" r="120" fill="none" stroke="#6d28d9" stroke-width="2"/><circle cx="600" cy="300" r="70" fill="none" stroke="#a855f7" stroke-width="2"/><text x="600" y="470" fill="#837c98" font-family="monospace" font-size="26" text-anchor="middle">PLACEHOLDER</text></svg>`,
-)}`;
+const CONTENT_DIR = join(process.cwd(), "content", "blog");
 
-// ─── TROCAR AQUI ───────────────────────────────────────────────────────
-// Substitua este array pelo loader de MDX/markdown. Nada mais muda.
-const sources: PostSource[] = [
-  {
-    slug: "tokens-antes-de-componentes",
-    title: "PLACEHOLDER — Tokens antes de componentes",
-    lead: "PLACEHOLDER — Por que a primeira coisa a existir em um design system não é um botão, e sim o vocabulário que descreve o botão.",
-    date: "2025-07-18",
-    tags: ["Design System"],
-    pattern: "stack",
-    accent: "violet",
-    featured: true,
-    content: [
-      {
-        type: "paragraph",
-        content: [
-          "PLACEHOLDER — Todo sistema começa errado do mesmo jeito: alguém desenha um botão bonito, alguém traduz em código, e o valor ",
-          { type: "code", text: "#a855f7" },
-          " aparece em dezessete arquivos diferentes. O problema nunca foi o botão. Foi não existir um nome para aquela cor antes de ela ser usada.",
-        ],
-      },
-      {
-        type: "callout",
-        tone: "note",
-        title: "Contexto",
-        content: [
-          "PLACEHOLDER — Este post assume um time pequeno, um produto só e nenhuma ferramenta de design system paga. É o caso onde a disciplina importa mais.",
-        ],
-      },
-      { type: "heading", level: 2, id: "o-vocabulario", text: "PLACEHOLDER — O vocabulário vem primeiro" },
-      {
-        type: "paragraph",
-        content: [
-          "PLACEHOLDER — Um token é um contrato entre design e código. Ele diz ",
-          { type: "strong", text: "o que a cor significa" },
-          ", não que cor ela é. Quando o significado está nomeado, trocar o valor vira uma linha; quando só o valor existe, trocar vira uma arqueologia.",
-        ],
-      },
-      {
-        type: "code",
-        lang: "ts",
-        filename: "tokens/semantic.ts",
-        highlightLines: [6, 7],
-        code: `import { violet, ink } from "./primitives";
+const PATTERNS: PostPattern[] = ["stack", "bars", "lines", "dots"];
+const ACCENTS: PostAccent[] = ["violet", "teal", "blue", "amber"];
 
-export const semantic = {
-  surface: { base: ink[900], raised: ink[850] },
-  border: { subtle: ink[700], strong: ink[600] },
-  // o primitivo nunca vaza para o componente:
-  accent: { default: violet[500], bright: violet[400] },
-  text: { primary: ink[100], secondary: ink[300] },
-} as const;
-
-export type SemanticToken = keyof typeof semantic;`,
-      },
-      {
-        type: "paragraph",
-        content: [
-          "PLACEHOLDER — A camada semântica existe para que o componente nunca pergunte “qual violeta?”. Ele pergunta “qual é o accent?” e a resposta pode mudar sem que uma linha do componente mude. Veja ",
-          { type: "link", text: "a escala completa", href: "#a-escala" },
-          ".",
-        ],
-      },
-      { type: "heading", level: 3, id: "primitivo-vs-semantico", text: "PLACEHOLDER — Primitivo vs. semântico" },
-      {
-        type: "table",
-        head: ["Camada", "Exemplo", "Quem usa"],
-        rows: [
-          ["Primitivo", "violet.500", "só a camada semântica"],
-          ["Semântico", "accent.default", "componentes"],
-          ["Componente", "button.bg", "casos excepcionais"],
-        ],
-      },
-      { type: "heading", level: 2, id: "a-escala", text: "PLACEHOLDER — A escala que não trai" },
-      {
-        type: "paragraph",
-        content: [
-          "PLACEHOLDER — Grade de 4px, sem exceção. Toda vez que alguém abre exceção, a exceção vira padrão em três sprints. É mais barato arredondar o design do que sustentar duas gramáticas de espaçamento.",
-        ],
-      },
-      {
-        type: "list",
-        items: [
-          ["PLACEHOLDER — espaçamento sempre múltiplo de 4"],
-          ["PLACEHOLDER — raio vem de quatro opções nomeadas, não de números soltos"],
-          [
-            "PLACEHOLDER — tipografia fluida com ",
-            { type: "code", text: "clamp()" },
-            ", nunca breakpoint por breakpoint",
-          ],
-          ["PLACEHOLDER — motion com uma curva só, duas durações"],
-        ],
-      },
-      {
-        type: "quote",
-        content: [
-          "PLACEHOLDER — Um sistema não é um conjunto de componentes. É o conjunto de decisões que você não precisa tomar de novo.",
-        ],
-      },
-      { type: "heading", level: 2, id: "migrando", text: "PLACEHOLDER — Migrando sem parar o produto" },
-      {
-        type: "paragraph",
-        content: [
-          "PLACEHOLDER — A migração que funciona é a chata: um arquivo por vez, sempre com o valor antigo ao lado do novo até o último call site sumir.",
-        ],
-      },
-      {
-        type: "code",
-        lang: "diff",
-        filename: "components/card.css",
-        variant: "diff",
-        code: `- background: #13111b;
-- border: 1px solid #1f1c2b;
-- padding: 22px;
-+ background: var(--bg-surface);
-+ border: 1px solid var(--border-subtle);
-+ padding: var(--space-6);`,
-      },
-      {
-        type: "callout",
-        tone: "warn",
-        title: "Cuidado",
-        content: [
-          "PLACEHOLDER — Não migre e redesenhe no mesmo commit. Se o visual mudar junto, você perde a única forma barata de saber se a migração quebrou algo.",
-        ],
-      },
-      { type: "divider" },
-      {
-        type: "image",
-        src: placeholderFigure,
-        alt: "PLACEHOLDER — diagrama das camadas de token",
-        caption: "PLACEHOLDER — as três camadas e a direção única da dependência.",
-      },
-      {
-        type: "callout",
-        tone: "tip",
-        title: "Atalho",
-        content: [
-          "PLACEHOLDER — Rode um grep por ",
-          { type: "code", text: "#[0-9a-f]{6}" },
-          " no CI. Cor hardcoded vira erro de build e a discussão acaba.",
-        ],
-      },
-    ],
-  },
-
-  {
-    slug: "interface-financeira-honesta",
-    title: "PLACEHOLDER — Uma interface financeira que não mente",
-    lead: "PLACEHOLDER — Saldo arredondado, estado de carregamento otimista, número que muda sozinho: três formas comuns de perder a confiança do usuário em dez segundos.",
-    date: "2025-06-02",
-    tags: ["Fintech", "Interface"],
-    pattern: "bars",
-    accent: "teal",
-    content: [
-      {
-        type: "paragraph",
-        content: [
-          "PLACEHOLDER — Em produto financeiro, a interface não é a camada de apresentação: ela ",
-          { type: "em", text: "é" },
-          " o produto para quem usa. Um número exibido antes de estar confirmado não é uma otimização, é uma afirmação falsa.",
-        ],
-      },
-      { type: "heading", level: 2, id: "estado-pendente", text: "PLACEHOLDER — O estado pendente é um estado de verdade" },
-      {
-        type: "paragraph",
-        content: [
-          "PLACEHOLDER — Skeleton não resolve: ele só esconde que você não sabe. O que funciona é mostrar o valor conhecido e marcar explicitamente o que ainda está em trânsito.",
-        ],
-      },
-      {
-        type: "code",
-        lang: "tsx",
-        filename: "components/balance.tsx",
-        highlightLines: [9],
-        code: `type BalanceState =
-  | { status: "settled"; cents: number }
-  | { status: "pending"; cents: number; inflight: number };
-
-export function Balance({ state }: { state: BalanceState }) {
-  return (
-    <p className="balance">
-      {formatBRL(state.cents)}
-      {state.status === "pending" && <PendingBadge amount={state.inflight} />}
-    </p>
-  );
-}`,
-      },
-      {
-        type: "callout",
-        tone: "tip",
-        title: "Regra",
-        content: [
-          "PLACEHOLDER — Se o número pode mudar em menos de um segundo, ele precisa de um rótulo dizendo isso. Silêncio é pior que espera.",
-        ],
-      },
-      { type: "heading", level: 3, id: "arredondamento", text: "PLACEHOLDER — Arredondar é uma decisão de produto" },
-      {
-        type: "paragraph",
-        content: [
-          "PLACEHOLDER — Centavos importam porque o usuário confere. Trabalhe em inteiros e formate na borda — nunca guarde ",
-          { type: "code", text: "number" },
-          " de ponto flutuante representando dinheiro.",
-        ],
-      },
-      {
-        type: "list",
-        ordered: true,
-        items: [
-          ["PLACEHOLDER — armazene em centavos, inteiro"],
-          ["PLACEHOLDER — formate só na renderização"],
-          ["PLACEHOLDER — nunca some valores já formatados"],
-        ],
-      },
-      { type: "heading", level: 2, id: "erros", text: "PLACEHOLDER — Erro também é conteúdo" },
-      {
-        type: "quote",
-        content: ["PLACEHOLDER — Um erro sem próximo passo é só um susto com tipografia melhor."],
-      },
-      {
-        type: "paragraph",
-        content: [
-          "PLACEHOLDER — Todo estado de erro precisa de causa provável e ação. Se você não consegue escrever a ação, o erro está sendo tratado no lugar errado do sistema.",
-        ],
-      },
-    ],
-  },
-
-  {
-    slug: "motion-que-explica",
-    title: "PLACEHOLDER — Motion que explica, não que enfeita",
-    lead: "PLACEHOLDER — Animação boa responde a uma pergunta que o usuário já estava fazendo: de onde isso veio e para onde foi.",
-    date: "2025-04-27",
-    tags: ["Motion", "Interface"],
-    pattern: "lines",
-    accent: "blue",
-    content: [
-      {
-        type: "paragraph",
-        content: [
-          "PLACEHOLDER — A pergunta antes de qualquer animação é curta: o que ela esclarece? Se a resposta é “fica bonito”, provavelmente é latência disfarçada de personalidade.",
-        ],
-      },
-      { type: "heading", level: 2, id: "continuidade", text: "PLACEHOLDER — Continuidade acima de duração" },
-      {
-        type: "paragraph",
-        content: [
-          "PLACEHOLDER — O olho perdoa uma transição rápida demais; não perdoa um elemento que aparece do nada em outro canto da tela. Continuidade espacial vale mais que curva sofisticada.",
-        ],
-      },
-      {
-        type: "code",
-        lang: "css",
-        filename: "styles/motion.css",
-        code: `.card {
-  /* nunca anime width/height: layout thrash garantido */
-  transition:
-    transform var(--dur) var(--ease),
-    border-color var(--dur) var(--ease),
-    box-shadow var(--dur) var(--ease);
+function requireString(data: Frontmatter, key: string, file: string): string {
+  const value = data[key];
+  if (typeof value !== "string" || !value.trim()) {
+    throw new Error(`${file}: frontmatter '${key}' é obrigatório.`);
+  }
+  return value.trim();
 }
 
-.card:hover {
-  transform: translateY(-4px);
-  border-color: var(--border-strong);
+function requireOneOf<T extends string>(
+  data: Frontmatter,
+  key: string,
+  allowed: T[],
+  file: string,
+): T {
+  const value = requireString(data, key, file);
+  if (!allowed.includes(value as T)) {
+    throw new Error(`${file}: '${key}' deve ser um de ${allowed.join(" | ")} — recebeu '${value}'.`);
+  }
+  return value as T;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .card { transition: none; }
-}`,
-      },
-      {
-        type: "callout",
-        tone: "warn",
-        title: "Não negociável",
-        content: [
-          "PLACEHOLDER — ",
-          { type: "code", text: "prefers-reduced-motion" },
-          " não é um extra de acessibilidade. Para parte das pessoas é a diferença entre usar e não usar o produto.",
-        ],
-      },
-      { type: "heading", level: 3, id: "duracoes", text: "PLACEHOLDER — Duas durações bastam" },
-      {
-        type: "table",
-        head: ["Uso", "Duração", "Curva"],
-        rows: [
-          ["feedback direto", "180ms", "ease padrão"],
-          ["transição de estado", "280ms", "ease padrão"],
-          ["entrada em cena", "700ms", "ease padrão"],
-        ],
-      },
-      {
-        type: "paragraph",
-        content: [
-          "PLACEHOLDER — Três valores, uma curva. Quanto menor o vocabulário de motion, mais o produto parece uma coisa só.",
-        ],
-      },
-    ],
-  },
+/**
+ * O nome do arquivo é o slug, sem exceção: a URL fica previsível a partir da
+ * árvore de arquivos. Um `slug` divergente no frontmatter falha o build em vez
+ * de criar uma rota que ninguém acha.
+ */
+function loadPost(file: string): PostSource {
+  const slug = file.replace(/\.mdx?$/, "");
+  const { data, body } = parseFrontmatter(readFileSync(join(CONTENT_DIR, file), "utf8"), file);
 
-  {
-    slug: "arquitetura-de-app-que-dura",
-    title: "PLACEHOLDER — Arquitetura de um app que dura três anos",
-    lead: "PLACEHOLDER — O que sobrevive não é a escolha de framework. É onde você colocou as fronteiras e o que aceitou não abstrair.",
-    date: "2025-03-11",
-    tags: ["Arquitetura"],
-    pattern: "dots",
-    accent: "amber",
-    content: [
-      {
-        type: "paragraph",
-        content: [
-          "PLACEHOLDER — Código que dura tem menos camadas do que a internet recomenda e fronteiras mais nítidas do que a pressa permite.",
-        ],
-      },
-      { type: "heading", level: 2, id: "fronteiras", text: "PLACEHOLDER — Fronteiras onde a mudança acontece" },
-      {
-        type: "paragraph",
-        content: [
-          "PLACEHOLDER — Uma fronteira só se paga onde os dois lados mudam por motivos diferentes. Em qualquer outro lugar ela é indireção com nome bonito.",
-        ],
-      },
-      {
-        type: "code",
-        lang: "ts",
-        filename: "lib/repository.ts",
-        code: `// a fronteira é o contrato, não a pasta
-export interface PostRepository {
-  all(): Promise<Post[]>;
-  bySlug(slug: string): Promise<Post | null>;
+  if (typeof data.slug === "string" && data.slug.trim() && data.slug.trim() !== slug) {
+    throw new Error(`${file}: 'slug' (${data.slug}) diverge do nome do arquivo (${slug}).`);
+  }
+
+  const date = requireString(data, "date", file);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    throw new Error(`${file}: 'date' deve estar em YYYY-MM-DD — recebeu '${date}'.`);
+  }
+
+  const tags = Array.isArray(data.tags) ? data.tags.filter(Boolean) : [];
+  if (!tags.length) throw new Error(`${file}: 'tags' precisa de pelo menos uma entrada.`);
+
+  return {
+    slug,
+    title: requireString(data, "title", file),
+    lead: requireString(data, "lead", file),
+    date,
+    tags,
+    pattern: requireOneOf(data, "pattern", PATTERNS, file),
+    accent: requireOneOf(data, "accent", ACCENTS, file),
+    ...(data.featured === true ? { featured: true as const } : {}),
+    ...(data.draft === true ? { draft: true as const } : {}),
+    content: parseMarkdown(body, file),
+  };
 }
 
-// hoje: memória. amanhã: mdx, cms, banco.
-export const repository: PostRepository = memoryRepository;`,
-      },
-      {
-        type: "callout",
-        tone: "note",
-        title: "Regra prática",
-        content: [
-          "PLACEHOLDER — Se você não consegue nomear a segunda implementação possível, a interface ainda não precisa existir.",
-        ],
-      },
-      { type: "heading", level: 2, id: "deletar", text: "PLACEHOLDER — Otimize para deletar" },
-      {
-        type: "quote",
-        content: ["PLACEHOLDER — A métrica honesta de arquitetura é quanto tempo leva para remover uma feature inteira."],
-      },
-      {
-        type: "list",
-        items: [
-          ["PLACEHOLDER — uma feature por pasta, incluindo seus testes"],
-          ["PLACEHOLDER — nada de util.ts genérico compartilhado por todos"],
-          ["PLACEHOLDER — dependências apontam para dentro, nunca para os lados"],
-        ],
-      },
-    ],
-  },
-
-  {
-    slug: "o-custo-de-um-componente-generico",
-    title: "PLACEHOLDER — O custo escondido de um componente genérico",
-    lead: "PLACEHOLDER — Toda prop booleana nova é uma dívida. Em algum momento vale mais escrever o segundo componente do que parametrizar o primeiro.",
-    date: "2025-01-23",
-    tags: ["Design System", "Arquitetura"],
-    pattern: "stack",
-    accent: "violet",
-    content: [
-      {
-        type: "paragraph",
-        content: [
-          "PLACEHOLDER — O componente começa com três props. Seis meses depois tem quatorze, três delas mutuamente exclusivas, e ninguém lembra por quê.",
-        ],
-      },
-      { type: "heading", level: 2, id: "sinais", text: "PLACEHOLDER — Os sinais de que passou do ponto" },
-      {
-        type: "list",
-        ordered: true,
-        items: [
-          [
-            "PLACEHOLDER — existe um ",
-            { type: "code", text: "if" },
-            " que muda a estrutura do JSX inteira",
-          ],
-          ["PLACEHOLDER — duas props nunca podem ser verdadeiras juntas"],
-          ["PLACEHOLDER — o nome do componente virou um substantivo abstrato"],
-        ],
-      },
-      {
-        type: "code",
-        lang: "tsx",
-        filename: "components/panel.tsx",
-        variant: "diff",
-        code: `- <Panel compact bordered collapsible withHeader tone="danger" />
-+ <AlertPanel tone="danger" />
-+ <CollapsiblePanel title="Detalhes" />`,
-      },
-      {
-        type: "paragraph",
-        content: [
-          "PLACEHOLDER — Duplicação local é mais barata que acoplamento global. A regra prática: ",
-          { type: "strong", text: "abstraia na terceira repetição, não na segunda" },
-          ".",
-        ],
-      },
-      {
-        type: "callout",
-        tone: "tip",
-        title: "Teste rápido",
-        content: [
-          "PLACEHOLDER — Se explicar a prop leva mais tempo que reescrever o componente, a prop não devia existir.",
-        ],
-      },
-    ],
-  },
-];
-// ─── fim do bloco a trocar ─────────────────────────────────────────────
+const sources: PostSource[] = readdirSync(CONTENT_DIR)
+  .filter((file) => /\.mdx?$/.test(file))
+  .map(loadPost);
 
 const posts: Post[] = sources
   .map(derivePost)
+  // rascunho aparece em `next dev` e some do build — assim dá para revisar no
+  // site sem que o texto inacabado vá ao ar
+  .filter((post) => !post.draft || process.env.NODE_ENV !== "production")
   .sort((a, b) => b.date.localeCompare(a.date));
 
 /* ------------------------------------------------------------------ */

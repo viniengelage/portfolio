@@ -8,6 +8,7 @@ tags:
   - React
 pattern: dots
 accent: blue
+draft: true
 ---
 
 Todo app React começa organizado. `components/`, `hooks/`, `utils/`, `services/` — limpo, previsível, fácil de explicar em uma reunião de kickoff. O problema aparece uns seis meses depois, quando `components/` tem cento e quarenta arquivos e ninguém consegue dizer quais podem ser apagados.

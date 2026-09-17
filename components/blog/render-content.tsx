@@ -4,16 +4,10 @@ import { Callout, mdxComponents } from "./mdx";
 import { CodeBlock } from "./code-block";
 
 /**
- * Ponte temporária entre os dados mockados e o mapa de componentes.
- *
- * ---------------------------------------------------------------------------
- * PONTO DE TROCA (MDX)
- * ---------------------------------------------------------------------------
- * Quando o conteúdo virar MDX, este arquivo inteiro some e a página do post
- * troca `<RenderContent content={post.content} />` por
- * `<MDXRemote source={post.body} components={mdxComponents} />`.
- * Todos os elementos abaixo já saem de `mdxComponents`, então o resultado
- * visual é idêntico.
+ * Desenha a AST do post. O markdown de `content/blog` é traduzido para
+ * `ContentNode[]` por `lib/markdown.ts`, e cada nó cai num elemento de
+ * `mdxComponents` — o mesmo mapa que um pipeline MDX consumiria, caso um dia
+ * o conteúdo precise de componentes React embutidos.
  */
 
 const { p: P, h2: H2, h3: H3, h4: H4, strong: Strong, em: Em, code: InlineCode, a: A, blockquote: Quote, ul: Ul, ol: Ol, li: Li, img: Img, hr: Hr, table: Table, thead: Thead, tbody: Tbody, tr: Tr, th: Th, td: Td } = mdxComponents;
