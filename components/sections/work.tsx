@@ -26,7 +26,7 @@ const projects: Project[] = [
     title: "O mês inteiro organizado, sem planilha",
     description:
       "App de organização financeira pessoal para iOS e Android. Contas, cartões, limites, assinaturas e lembretes num lugar só — com Open Finance importando o extrato e relatórios que explicam o mês em texto.",
-    role: "Design de interface e design system · Arquitetura do app · Backend e integração Open Finance",
+    role: "Planejamento, design e desenvolvimento completo do produto · Design system · App, backend e integração Open Finance",
     stack: ["React Native", "TypeScript", "Node", "Open Finance"],
     url: "organizadin.com",
     href: "https://organizadin.com",
@@ -53,8 +53,7 @@ const projects: Project[] = [
     title: "Viver de renda, em cinco cliques",
     description:
       "App de investimentos em fundos imobiliários e ações da gestora TRX. Carteiras prontas montadas por especialistas, aporte a partir de R$ 150 e DARF automático — incluindo o Trix Kids, conta de investimento para menores.",
-    // PLACEHOLDER: confirmar o papel real no Trix
-    role: "PLACEHOLDER — confirmar: interface do app · carteiras e simulador · onboarding",
+    role: "Desenvolvedor principal · Migração da arquitetura legada para Expo com atualizações OTA · Reescrita do serviço de API · Criação e adoção do novo design system",
     stack: ["React Native", "TypeScript", "Fintech", "CVM"],
     url: "trix.com.br",
     href: "https://trix.com.br",
