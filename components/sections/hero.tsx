@@ -54,10 +54,10 @@ export function Hero() {
 
           <Reveal delay={240}>
             <div className="hero__actions">
-              <a className="btn btn--primary" href="#trabalho">
+              <a className="btn" href="#trabalho">
                 Ver projetos
               </a>
-              <a className="btn btn--ghost" href="/blog">
+              <a className="btn" href="/blog">
                 Ler o blog
               </a>
             </div>

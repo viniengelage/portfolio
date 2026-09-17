@@ -50,7 +50,7 @@ export function SiteNav() {
           ))}
         </div>
 
-        <Link href="/#contato" className="btn btn--primary nav__cta">
+        <Link href="/#contato" className="btn nav__cta">
           Contato
         </Link>
 
