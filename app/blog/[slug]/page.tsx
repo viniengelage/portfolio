@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "@phosphor-icons/react/dist/ssr";
@@ -75,9 +76,13 @@ export default async function BlogPostPage({ params }: PageProps) {
 
             <div className="post-byline">
               <div className="post-author">
-                <span className="monogram post-author__avatar" aria-hidden="true">
-                  {AUTHOR.initials}
-                </span>
+                <Image
+                  className="avatar post-author__avatar"
+                  src="/profile.png"
+                  alt={AUTHOR.name}
+                  width={40}
+                  height={40}
+                />
                 <span className="post-author__text">
                   <span className="post-author__name">{AUTHOR.name}</span>
                   <span className="post-author__role">{AUTHOR.role}</span>
@@ -116,9 +121,13 @@ export default async function BlogPostPage({ params }: PageProps) {
               </div>
 
               <div className="author-box glass">
-                <span className="monogram author-box__avatar" aria-hidden="true">
-                  {AUTHOR.initials}
-                </span>
+                <Image
+                  className="avatar author-box__avatar"
+                  src="/profile.png"
+                  alt={AUTHOR.name}
+                  width={56}
+                  height={56}
+                />
                 <div className="author-box__text">
                   <p className="author-box__name">{AUTHOR.name}</p>
                   <p className="author-box__bio">{AUTHOR.bio}</p>

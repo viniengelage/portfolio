@@ -38,8 +38,8 @@ export function SiteNav() {
   return (
     <>
       <nav className="nav glass" aria-label="Navegação principal">
-        <Link href="/" className="monogram" aria-label="Página inicial">
-          VE
+        <Link href="/" aria-label="Página inicial">
+          <img className="brand-mark" src="/logo-mark.svg" alt="" width={22} height={32} />
         </Link>
 
         <div className="nav__links">

@@ -695,12 +695,11 @@
   gap: var(--space-3);
 }
 
-/* blog.css é @import do topo de globals.css: para vencer `.monogram` (mesma
+/* blog.css é @import do topo de globals.css: para vencer `.avatar` (mesma
    especificidade, declarado depois) o seletor precisa de um ponto a mais. */
-.monogram.post-author__avatar {
+.avatar.post-author__avatar {
   width: var(--space-10);
   height: var(--space-10);
-  font-size: 14px;
 }
 
 .post-author__text {
@@ -1091,12 +1090,10 @@
   border-radius: var(--radius-panel);
 }
 
-.monogram.author-box__avatar {
+.avatar.author-box__avatar {
   /* 56px: na grade de 4px, mas sem token próprio na escala */
   width: 56px;
   height: 56px;
-  flex-shrink: 0;
-  font-size: 18px;
 }
 
 .author-box__name {

@@ -310,7 +310,7 @@ svg {
 
 /* ============================================================
    GLASS — rim light + fill translúcido.
-   Sólido é reservado ao monograma (âncora de marca).
+   Nenhuma superfície sólida no sistema: a única massa de cor é a própria marca.
    ============================================================ */
 .glass {
   background: var(--glass-panel);
@@ -342,10 +342,10 @@ svg {
     transform var(--dur-instant) var(--ease-out);
 }
 
-/* Estilo único: o roxo saiu dos botões. Dentro da nav ele disputava com o
-   monograma sólido a poucos pixels de distância — dois roxos de intensidades
-   diferentes lado a lado. O acento agora vive só no monograma, nos labels e
-   no serifado editorial; hierarquia de CTA vem da ordem e do contexto. */
+/* Estilo único: o roxo saiu dos botões. Dentro da nav ele disputava com a
+   marca a poucos pixels de distância — dois roxos de intensidades diferentes
+   lado a lado. O acento agora vive só na marca, nos labels e no serifado
+   editorial; hierarquia de CTA vem da ordem e do contexto. */
 .btn:hover {
   background: rgb(255 255 255 / 9%);
   border-color: rgb(255 255 255 / 20%);
@@ -595,19 +595,28 @@ svg {
     0 8px 40px -8px rgb(0 0 0 / 60%);
 }
 
-.monogram {
-  display: grid;
-  width: var(--space-8);
+/* A marca real substituiu as iniciais num disco sólido. O símbolo já é roxo,
+   então o disco iria matá-lo — e tirar aquela massa sólida da nav é o que
+   faz o roxo parar de disputar com o resto. */
+.brand-mark {
+  display: block;
+  width: auto;
   height: var(--space-8);
   flex-shrink: 0;
-  place-items: center;
+  transition: opacity var(--dur-fast) var(--ease-hover);
+}
+
+a:hover > .brand-mark {
+  opacity: 0.78;
+}
+
+.avatar {
+  flex-shrink: 0;
   border-radius: var(--radius-pill);
-  /* único elemento sólido do sistema: âncora de marca */
-  background: var(--accent);
-  color: var(--text-on-accent);
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 700;
+  /* o retrato tem fundo próprio: o aro impede que ele encoste no fundo da
+     página sem transição */
+  box-shadow: 0 0 0 1px var(--glass-border);
+  object-fit: cover;
 }
 
 .nav__links {
@@ -745,10 +754,8 @@ svg {
   gap: var(--space-3);
 }
 
-.footer .monogram {
-  width: var(--space-6);
+.footer .brand-mark {
   height: var(--space-6);
-  font-size: 10px;
 }
 
 .footer__colophon {

@@ -79,8 +79,8 @@ export function Contact() {
 
         <footer className="footer">
           <div className="footer__brand">
-            <Link href="/" className="monogram" aria-label="Página inicial">
-              VE
+            <Link href="/" aria-label="Página inicial">
+              <img className="brand-mark" src="/logo-mark.svg" alt="" width={22} height={32} />
             </Link>
             <p>
               © {year} {AUTHOR.name} · Feito com carinho
