@@ -1,0 +1,897 @@
+/* ============================================================
+   MOCKUPS — telas ilustrativas de produto, 100% HTML/CSS/SVG.
+   Nenhuma imagem, nenhum JS. Renderizados como Server Components.
+
+   Arquitetura de classes
+   ----------------------
+   .mk              wrapper/clipping box (role="img"), define --mk-accent
+     .mk__stage     camada escalável (bleed acontece aqui dentro)
+       .mk__asset   ilustração de fundo (grade, anel, curva)
+       .mk__rig     caixa nas coordenadas do device — device + cards flutuantes
+         .mk__device  chassi do celular (pode rotacionar)
+           .mk__screen
+         .mk__float   card de vidro, posicionado em relação ao RIG (nunca rotaciona)
+     .mk__badge     selo "mockup ilustrativo" (fora do stage: nunca escala)
+
+   Modificadores: .mk--organizadin | .mk--bussola | .mk--trix
+   O card pai injeta a cor via --project-accent.
+   ============================================================ */
+
+/* ============================================================
+   1. BASE COMPARTILHADA
+   ============================================================ */
+.mk {
+  /* cor do projeto: o pai define --project-accent, o violeta é o fallback */
+  --mk-accent: var(--project-accent, var(--accent));
+
+  /* derivadas do accent — evita repetir color-mix() em 40 lugares */
+  --mk-a10: color-mix(in srgb, var(--mk-accent) 10%, transparent);
+  --mk-a18: color-mix(in srgb, var(--mk-accent) 18%, transparent);
+  --mk-a22: color-mix(in srgb, var(--mk-accent) 22%, transparent);
+  --mk-a30: color-mix(in srgb, var(--mk-accent) 30%, transparent);
+  --mk-a45: color-mix(in srgb, var(--mk-accent) 45%, transparent);
+  --mk-a90: color-mix(in srgb, var(--mk-accent) 90%, transparent);
+
+  /* vidro / rim light */
+  --mk-w04: rgb(255 255 255 / 4%);
+  --mk-w06: rgb(255 255 255 / 6%);
+  --mk-w08: rgb(255 255 255 / 8%);
+  --mk-w10: rgb(255 255 255 / 10%);
+  --mk-w14: rgb(255 255 255 / 14%);
+  --mk-w28: rgb(255 255 255 / 28%);
+
+  /* geometria do device */
+  --device-w: 268px;
+  --device-h: 520px;
+  --device-radius: 36px;
+  --device-top: var(--space-6); /* o aparelho ancora no topo; a base sangra sozinha */
+
+  --mk-scale: 1;
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 480px;
+  overflow: hidden; /* defensivo: o bleed é cortado aqui mesmo se o pai não cortar */
+  isolation: isolate;
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+.mk__stage {
+  position: absolute;
+  inset: 0;
+  transform: scale(var(--mk-scale));
+  /* ancora no topo: encolher só aumenta o sangramento inferior, nunca corta o topo */
+  transform-origin: 50% 0;
+}
+
+/* ---- ilustração de fundo --------------------------------- */
+.mk__asset {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---- rig: coordenadas do aparelho ------------------------- */
+.mk__rig {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: var(--device-top);
+  width: var(--device-w);
+  height: var(--device-h);
+  transform: translateX(-50%) translateX(var(--mk-rig-x, 0px));
+}
+
+/* ---- chassi ---------------------------------------------- */
+.mk__device {
+  position: absolute;
+  inset: 0;
+  padding: var(--space-3);
+  border-radius: var(--device-radius);
+  /* chassi levemente distinto do fundo da página, ainda derivado dos tokens */
+  background: color-mix(in srgb, var(--bg-base) 60%, var(--bg-raised));
+  border: 1px solid var(--mk-w14);
+  box-shadow: 0 24px 60px -12px rgb(0 0 0 / 70%);
+  transform: rotate(var(--mk-device-rotate, 0deg));
+}
+
+.mk__screen {
+  position: relative;
+  height: 100%;
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+  /* leve halo do accent no topo da tela */
+  background:
+    linear-gradient(180deg, var(--mk-a10), transparent 44%),
+    var(--bg-base);
+}
+
+/* o conteúdo nunca comprime: o excedente é cortado pelo bleed inferior */
+.mk__screen > * {
+  flex: 0 0 auto;
+}
+
+/* ============================================================
+   2. PRIMITIVAS DE TELA (compartilhadas pelos 3 apps)
+   ============================================================ */
+.mk__mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* barra de status: relógio + 3 "ícones" abstratos */
+.mk__status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: var(--space-1);
+}
+
+.mk__status-time {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+}
+
+.mk__status-icons {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.mk__status-icons i {
+  display: block;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--mk-w28);
+}
+
+.mk__status-icons i:nth-child(1) { width: 12px; }
+.mk__status-icons i:nth-child(2) { width: 10px; }
+.mk__status-icons i:nth-child(3) { width: 16px; }
+
+/* cabeçalhos */
+.mk__eyebrow {
+  font-size: 11px;
+  line-height: 1.2;
+  color: var(--text-muted);
+}
+
+.mk__title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.mk__label {
+  font-size: 10px;
+  line-height: 1.3;
+  color: var(--text-muted);
+}
+
+.mk__label--xs {
+  font-size: 9px;
+}
+
+.mk__section-label {
+  font-size: 10px;
+  line-height: 1.3;
+  color: var(--text-secondary);
+}
+
+.mk__value {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+/* card interno de tela (saldo, patrimônio) */
+.mk__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-card);
+  background: var(--mk-w04);
+  border: 1px solid var(--mk-w08);
+}
+
+.mk__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.mk__row--tight {
+  justify-content: flex-start;
+}
+
+/* badge de status na cor do projeto */
+.mk__chip {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--mk-a18);
+  border: 1px solid var(--mk-a30);
+  color: var(--mk-accent);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* trilho + preenchimento genéricos */
+.mk__track {
+  position: relative;
+  display: block;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--mk-w06);
+  overflow: hidden;
+}
+
+.mk__track-fill {
+  display: block;
+  height: 100%;
+  width: var(--mk-w, 0%);
+  border-radius: inherit;
+  background: var(--mk-accent);
+  transform-origin: left center;
+}
+
+/* listas de linhas (transações, carteiras) */
+.mk__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-height: 0;
+}
+
+.mk__list-head {
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.mk__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.mk__item-icon {
+  position: relative;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-control);
+  background: var(--mk-a18);
+  border: 1px solid var(--mk-a30);
+}
+
+/* marca interna abstrata — evita ícone falso/legível */
+.mk__item-icon::after {
+  content: "";
+  position: absolute;
+  inset: var(--space-2);
+  border-radius: 2px;
+  background: var(--mk-accent);
+  opacity: 0.55;
+}
+
+.mk__item-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.mk__item-title {
+  font-size: 11px;
+  line-height: 1.2;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mk__item-meta {
+  font-size: 9px;
+  line-height: 1.2;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mk__item-value {
+  font-size: 10px;
+  line-height: 1.2;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.mk__item-delta {
+  font-size: 9px;
+  line-height: 1.2;
+  color: var(--mk-accent);
+  white-space: nowrap;
+}
+
+.mk__item-trail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-1);
+  flex: 0 0 auto;
+}
+
+/* ============================================================
+   3. CARD FLUTUANTE (vidro) — posicionado no espaço do RIG
+   ============================================================ */
+.mk__float {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-card);
+  background: color-mix(in srgb, var(--bg-surface) 94%, transparent);
+  border: 1px solid var(--mk-w10);
+  box-shadow:
+    inset 0 1px 0 var(--mk-w14),
+    0 0 40px -8px rgb(0 0 0 / 75%);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+}
+
+.mk__float-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.mk__float-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.mk__float-title {
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.mk__float-meta {
+  font-size: 8px;
+  line-height: 1.2;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.mk__float-figure {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--mk-accent);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   4. SELO OBRIGATÓRIO — estas telas não são capturas reais
+   ============================================================ */
+.mk__badge {
+  position: absolute;
+  z-index: 3;
+  left: var(--space-4);
+  bottom: var(--space-4);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  background: var(--mk-w06);
+  border: 1px solid var(--mk-w10);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ============================================================
+   5. ORGANIZADIN — tema ORDEM
+   grade de calendário (heatmap de gastos) sangrando pela esquerda
+   ============================================================ */
+.mk--organizadin {
+  --mk-rig-x: 24px;
+}
+
+.mk-org__calendar {
+  top: var(--space-8);
+  left: -150px;
+  display: grid;
+  grid-template-columns: repeat(7, 54px);
+  gap: var(--space-4);
+  /* esmaece na direção do device para não competir com a tela */
+  mask-image: linear-gradient(105deg, rgb(0 0 0 / 100%) 30%, rgb(0 0 0 / 15%) 88%);
+  -webkit-mask-image: linear-gradient(105deg, rgb(0 0 0 / 100%) 30%, rgb(0 0 0 / 15%) 88%);
+}
+
+.mk-org__day {
+  width: 54px;
+  height: 54px;
+  border-radius: var(--radius-control);
+  border: 1px solid var(--mk-a22);
+  /* --mk-heat vem inline: 0% a 34% */
+  background: color-mix(in srgb, var(--mk-accent) var(--mk-heat, 0%), transparent);
+}
+
+/* dia de pico do mês */
+.mk-org__day.is-peak {
+  border-color: var(--mk-a45);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--mk-accent) 50%, transparent);
+}
+
+/* --- gráfico de barras horizontais ordenadas --- */
+.mk-org__budget {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.mk-org__budget-row {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.mk-org__budget-label {
+  font-size: 9px;
+  line-height: 1.2;
+  color: var(--text-secondary);
+}
+
+.mk-org__budget-track {
+  height: 6px;
+}
+
+.mk-org__budget-value {
+  font-size: 9px;
+  line-height: 1.2;
+  color: var(--text-muted);
+}
+
+/* --- card flutuante: limite de categoria, sangra pela direita --- */
+.mk-org__float {
+  top: 200px;
+  right: -56px;
+  width: 176px;
+}
+
+.mk-org__ring {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--mk-accent);
+  background: var(--mk-a18);
+}
+
+/* ============================================================
+   6. BÚSSOLA — tema NAVEGAÇÃO
+   anel dos 7 passos + device inclinado
+   ============================================================ */
+.mk--bussola {
+  --mk-ring-d: 392px;
+  --mk-ring-r: 196px;
+  --mk-device-rotate: -6deg;
+}
+
+.mk-bus__ring {
+  top: 50%;
+  left: 50%;
+  width: var(--mk-ring-d);
+  height: var(--mk-ring-d);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--mk-accent) 28%, transparent);
+}
+
+/* 7 nós distribuídos na circunferência via rotate + translateY */
+.mk-bus__node {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--bg-base);
+  border: 2px solid var(--mk-a45);
+  /* translate(-50%,-50%) fica na frente da cadeia: centra o nó ANTES de girar */
+  transform:
+    translate(-50%, -50%)
+    rotate(calc(var(--i) * (360deg / 7)))
+    translateY(calc(var(--mk-ring-r) * -1));
+}
+
+/* passo 3 (índice 2) — o passo ativo */
+.mk-bus__node--active {
+  width: 12px;
+  height: 12px;
+  background: var(--mk-accent);
+  border-color: var(--mk-accent);
+  box-shadow: 0 0 24px var(--mk-a90);
+}
+
+/* halo do pulso: transform-only, não mexe no layout */
+.mk-bus__node--active::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid var(--mk-a45);
+  opacity: 0;
+}
+
+/* --- tela: thread de conversa --- */
+.mk-bus__step {
+  font-size: 9px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--mk-accent);
+}
+
+.mk-bus__thread {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.mk-bus__bubble {
+  max-width: 196px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: 14px;
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  border: 1px solid transparent;
+}
+
+/* fala do usuário: alinhada à direita, tingida com o accent */
+.mk-bus__bubble--user {
+  align-self: flex-end;
+  background: var(--mk-a18);
+  border-color: var(--mk-a30);
+  border-bottom-right-radius: 4px;
+  color: var(--text-primary);
+}
+
+/* fala da Bússola: alinhada à esquerda, neutra */
+.mk-bus__bubble--guide {
+  align-self: flex-start;
+  background: var(--mk-w04);
+  border-color: var(--mk-w08);
+  border-bottom-left-radius: 4px;
+  font-size: 11px;
+}
+
+.mk-bus__action {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border-radius: var(--radius-card);
+  background: var(--mk-a10);
+  border: 1px solid color-mix(in srgb, var(--mk-accent) 34%, transparent);
+}
+
+.mk-bus__action-label {
+  font-size: 9px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--mk-accent);
+}
+
+.mk-bus__action-text {
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--text-primary);
+}
+
+/* --- card flutuante: termômetro dos 5 pilares --- */
+.mk-bus__float {
+  left: -72px;
+  bottom: 96px;
+  width: 160px;
+}
+
+.mk-bus__pillars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.mk-bus__pillar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/* trilho vertical: o fill cresce de baixo para cima */
+.mk-bus__pillar-track {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 8px;
+  height: 44px;
+  border-radius: var(--radius-pill);
+  background: var(--mk-w06);
+  overflow: hidden;
+}
+
+.mk-bus__pillar-fill {
+  display: block;
+  height: var(--mk-h, 0%);
+  border-radius: inherit;
+  background: var(--mk-accent);
+  transform-origin: bottom center;
+}
+
+.mk-bus__pillar-label {
+  font-size: 7px;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   7. TRIX — tema CRESCIMENTO
+   curva de patrimônio atravessando atrás do device
+   ============================================================ */
+.mk-trix__curve {
+  top: var(--space-12);
+  left: -56px;
+  right: -32px;
+  height: 250px;
+}
+
+/* NOTA: preserveAspectRatio="none" estica o viewBox nos dois eixos, então o
+   ponto final da curva cai sempre na borda direita do <svg>. */
+.mk-trix__curve svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.mk-trix__area {
+  fill: var(--mk-a22);
+}
+
+.mk-trix__line {
+  fill: none;
+  stroke: var(--mk-accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+/* ponto luminoso no fim da curva (canto superior direito).
+   right:32px o traz de volta para dentro do bleed, encostado na borda do card;
+   top:8px compensa a altura da curva nesse ponto (ela já está quase em y=0). */
+.mk-trix__dot {
+  position: absolute;
+  top: 8px;
+  right: 32px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--mk-accent);
+  box-shadow: 0 0 20px var(--mk-accent);
+  transform: translateY(-50%);
+}
+
+/* --- gráfico de 12 barras verticais (renda mensal) --- */
+.mk-trix__chart {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-1);
+  height: 48px;
+  margin-top: var(--space-2);
+}
+
+.mk-trix__bar {
+  flex: 1 1 0;
+  height: var(--mk-bar, 8px);
+  border-radius: 3px;
+  background: var(--mk-a45);
+  opacity: var(--mk-o, 0.4);
+  transform-origin: bottom center;
+}
+
+/* último mês: destaque sólido */
+.mk-trix__bar--current {
+  background: var(--mk-accent);
+  opacity: 1;
+}
+
+/* --- card flutuante: rendimento creditado, sangra pelo topo --- */
+.mk-trix__float {
+  top: -24px;
+  left: -40px;
+  width: 212px;
+}
+
+.mk-trix__icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-control);
+  background: var(--mk-a18);
+  border: 1px solid var(--mk-a30);
+  color: var(--mk-accent);
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* ============================================================
+   8. MOVIMENTO — tudo opt-in, só transform/opacity/stroke-dashoffset
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  /* pulso do passo ativo da Bússola — loop, roda independente da viewport */
+  .mk-bus__node--active::after {
+    animation: mk-pulse 2s linear infinite alternate;
+  }
+
+  /* As entradas abaixo são disparadas por `.reveal.is-visible`, que o
+     IntersectionObserver de `components/reveal.tsx` adiciona quando o card
+     entra na tela. Sem esse gate elas queimavam no load da página, com a
+     seção ainda abaixo da dobra — o trabalho era feito e ninguém via.
+     `both`/`forwards` seguram o estado inicial até lá. */
+
+  /* desenho da curva do Trix (pathLength=1 normaliza o traçado) */
+  .mk-trix__line {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+
+  .reveal.is-visible .mk-trix__line {
+    animation: mk-draw var(--dur-draw) var(--ease-out) forwards;
+  }
+
+  .mk-trix__area {
+    opacity: 0;
+  }
+
+  .reveal.is-visible .mk-trix__area {
+    animation: mk-fade var(--dur-draw) var(--ease-out) both;
+  }
+
+  /* entrada escalonada das barras — passo unificado em `--stagger` (60ms);
+     os valores antigos (90/70/45ms) eram três escalas concorrentes e o de
+     90ms estourava a faixa de 30–80ms */
+  .reveal.is-visible .mk-org__budget .mk__track-fill {
+    animation: mk-grow-x var(--dur-slow) var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * var(--stagger) + 160ms);
+  }
+
+  .reveal.is-visible .mk-bus__pillar-fill {
+    animation: mk-grow-y var(--dur-slow) var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * var(--stagger) + 160ms);
+  }
+
+  .reveal.is-visible .mk-trix__bar {
+    animation: mk-grow-y var(--dur-slow) var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * var(--stagger) + 160ms);
+  }
+}
+
+/* ============================================================
+   9. REAÇÃO AO HOVER DO CARD
+   O card já tinha estado de hover (borda + sombra), mas o mockup — a peça
+   mais elaborada da página — ficava congelado. Aqui a cena reconhece o cursor.
+   `ease-in-out` porque é movimento na tela, não entrada.
+   ============================================================ */
+@media (hover: hover) and (pointer: fine) {
+  .mk__stage {
+    /* compõe com o `--mk-scale` que já governa o sangramento */
+    transform: scale(calc(var(--mk-scale) * var(--mk-hover-scale, 1)));
+    transition: transform 400ms var(--ease-in-out);
+  }
+
+  .project:hover .mk__stage {
+    --mk-hover-scale: 1.02;
+  }
+
+  .mk__float {
+    transition: transform 400ms var(--ease-in-out);
+  }
+
+  /* o card flutuante sobe um pouco mais que a cena: reforça a profundidade */
+  .project:hover .mk__float {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes mk-pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  to {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+@keyframes mk-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes mk-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes mk-grow-x {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* o keyframe só toca transform: a opacidade inline das barras do Trix é preservada */
+@keyframes mk-grow-y {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+/* ============================================================
+   9. RESPONSIVO — a composição escala inteira, sem reflow interno
+   ============================================================ */
+@media (max-width: 900px) {
+  .mk {
+    --mk-scale: 0.92;
+    min-height: 440px;
+  }
+}
+
+@media (max-width: 720px) {
+  .mk {
+    --mk-scale: 0.84;
+    min-height: 400px;
+  }
+
+  .mk__badge {
+    left: var(--space-3);
+    bottom: var(--space-3);
+  }
+}

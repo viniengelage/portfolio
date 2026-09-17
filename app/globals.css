@@ -1,0 +1,882 @@
+@import "./styles/home.css";
+@import "./styles/mockups.css";
+@import "./styles/blog.css";
+
+/* ============================================================
+   TOKENS — espelham penpot.library.local.tokens
+   primitives -> semantic. Não usar primitivo direto em componente.
+   ============================================================ */
+:root {
+  /* --- primitives: violet */
+  --violet-300: #d8b4fe;
+  --violet-400: #c084fc;
+  --violet-500: #a855f7;
+  --violet-600: #9333ea;
+  --violet-700: #7e22ce;
+  --violet-800: #6d28d9;
+
+  /* --- primitives: ink (neutro com viés violeta) */
+  --ink-900: #08070c;
+  --ink-850: #0e0d14;
+  --ink-800: #13111b;
+  --ink-700: #1f1c2b;
+  --ink-600: #322c46;
+  --ink-400: #837c98;
+  --ink-300: #9c96ae;
+  --ink-200: #c7c2d6;
+  --ink-100: #edeaf5;
+
+  /* --- primitives: accents de projeto */
+  --teal-400: #2dd4bf;
+  --blue-400: #60a5fa;
+  --amber-400: #e8b368;
+  --rose-400: #fb7185;
+  --lime-300: #bef264;
+
+  /* --- semantic: superfícies */
+  --bg-base: var(--ink-900);
+  --bg-raised: var(--ink-850);
+  --bg-surface: var(--ink-800);
+
+  /* --- semantic: bordas */
+  --border-subtle: var(--ink-700);
+  --border-strong: var(--ink-600);
+  --border-glow: var(--violet-800);
+
+  /* --- semantic: texto (todos >= 4.5:1 sobre as 3 superfícies) */
+  --text-primary: var(--ink-100);
+  --text-secondary: var(--ink-300);
+  --text-muted: var(--ink-400);
+  --text-on-accent: var(--ink-900);
+
+  /* --- semantic: acento */
+  --accent: var(--violet-500);
+  --accent-bright: var(--violet-400);
+  --accent-deep: var(--violet-800);
+
+  /* --- semantic: acento por projeto */
+  --accent-organizadin: var(--teal-400);
+  --accent-bussola: var(--blue-400);
+  --accent-trix: var(--amber-400);
+  --status-available: var(--teal-400);
+
+  /* --- glass: o rim é o que faz ler como vidro */
+  --glass-surface: rgb(255 255 255 / 5%);
+  --glass-border: rgb(255 255 255 / 12%);
+  --glass-rim: rgb(255 255 255 / 14%);
+  --glass-accent: rgb(168 85 247 / 16%);
+  --glass-panel: rgb(19 17 27 / 72%);
+
+  /* --- escala de espaçamento: grade de 4px, sem exceção */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* --- raio */
+  --radius-control: 10px;
+  --radius-card: 16px;
+  --radius-panel: 24px;
+  --radius-pill: 9999px;
+
+  /* --- tipografia
+     `--ff-*` vêm do next/font (injetadas no <html>); aqui viram nomes semânticos.
+     Os dois namespaces precisam ser distintos: `:root` e o <html> do next/font
+     são o MESMO elemento, então reusar o nome criaria auto-referência. */
+  --font-display: var(--ff-inter-tight), "Inter Tight", system-ui, sans-serif;
+  --font-body: var(--ff-inter), Inter, system-ui, sans-serif;
+  --font-mono: var(--ff-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
+  --font-editorial: var(--ff-instrument-serif), "Instrument Serif", Georgia, serif;
+
+  /* fluid: mobile -> desktop, sem breakpoint */
+  --fs-display: clamp(40px, 6.2vw, 80px);
+  --fs-h2: clamp(30px, 4.4vw, 52px);
+  --fs-subtitle: clamp(20px, 2.9vw, 32px);
+  --fs-h3: clamp(21px, 2.4vw, 26px);
+  --fs-lead: clamp(16px, 1.6vw, 19px);
+  --fs-body: 17px;
+  --fs-label: 12px;
+
+  /* --- motion
+     uma curva por tipo de movimento (AUDIT.md §2): a decisão é do contexto,
+     não do gosto. Movimento constante usa `linear` direto, sem token. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1); /* entradas e saídas */
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1); /* movimento na tela */
+  --ease-hover: ease; /* cor e hover */
+
+  --dur-instant: 120ms; /* press feedback */
+  --dur-fast: 180ms; /* hover, cor */
+  --dur: 280ms; /* transições de UI */
+  --dur-slow: 420ms; /* overlays, drawers */
+  --dur-draw: 1200ms; /* desenho ilustrativo dos mockups */
+
+  --stagger: 60ms; /* passo padrão de escalonamento */
+
+  /* --- layout */
+  --shell: 1200px;
+  --gutter: var(--space-6);
+  --measure: 760px;
+}
+
+/* ============================================================
+   RESET + BASE
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* nav flutuante não pode cobrir a âncora */
+  scroll-padding-top: 120px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: rgb(168 85 247 / 30%);
+  color: var(--text-primary);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-bright);
+  outline-offset: 3px;
+  border-radius: var(--space-1);
+}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.shell {
+  width: min(100% - (2 * var(--gutter)), var(--shell));
+  margin-inline: auto;
+}
+
+.band {
+  position: relative;
+  padding-block: clamp(var(--space-20), 9vw, var(--space-32));
+  isolation: isolate;
+}
+
+.band--raised {
+  background: var(--bg-raised);
+  border-block: 1px solid var(--border-subtle);
+}
+
+.band__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: var(--space-3);
+  left: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: var(--accent);
+  color: var(--text-on-accent);
+  font-weight: 700;
+  border-radius: var(--radius-control);
+  transform: translateY(-200%);
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* ============================================================
+   TIPOGRAFIA UTILITÁRIA
+   ============================================================ */
+.label {
+  margin: 0;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.label--muted {
+  color: var(--text-muted);
+}
+
+.editorial {
+  font-family: var(--font-editorial);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent-bright);
+  /* serif tem métrica diferente da sans: compensa o alinhamento óptico */
+  letter-spacing: 0;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.section-head {
+  display: grid;
+  gap: var(--space-16);
+  grid-template-columns: 1.6fr 0.9fr;
+  align-items: end;
+}
+
+.section-head__title {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.section-head h2 {
+  font-size: var(--fs-h2);
+}
+
+.section-head__aside {
+  display: grid;
+  gap: var(--space-3);
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+/* ============================================================
+   GLASS — rim light + fill translúcido.
+   Sólido é reservado ao monograma (âncora de marca).
+   ============================================================ */
+.glass {
+  background: var(--glass-panel);
+  border: 1px solid rgb(255 255 255 / 9%);
+  box-shadow: inset 0 1px 0 var(--glass-rim);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-6);
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  transition:
+    background var(--dur-fast) var(--ease-hover),
+    border-color var(--dur-fast) var(--ease-hover),
+    box-shadow var(--dur-fast) var(--ease-hover),
+    transform var(--dur-instant) var(--ease-out);
+}
+
+.btn--primary {
+  background: var(--glass-accent);
+  border-color: rgb(192 132 252 / 42%);
+  box-shadow:
+    inset 0 1px 0 var(--glass-rim),
+    0 0 28px -8px rgb(168 85 247 / 35%);
+}
+
+.btn--primary:hover {
+  background: rgb(168 85 247 / 26%);
+  border-color: rgb(192 132 252 / 70%);
+  box-shadow:
+    inset 0 1px 0 var(--glass-rim),
+    0 0 40px -6px rgb(168 85 247 / 55%);
+}
+
+.btn--ghost {
+  background: var(--glass-surface);
+  border-color: var(--glass-border);
+  box-shadow: inset 0 1px 0 var(--glass-rim);
+}
+
+.btn--ghost:hover {
+  background: rgb(255 255 255 / 9%);
+  border-color: rgb(255 255 255 / 20%);
+}
+
+.btn:active {
+  transform: scale(0.97);
+  /* Assimetria: `:active` governa a IDA (press), a regra base governa a VOLTA.
+     O press responde em 60ms — o toque precisa de confirmação imediata —
+     e o release relaxa nos 120ms de `--dur-instant`. */
+  transition-duration: 60ms;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid rgb(255 255 255 / 9%);
+  border-radius: 6px;
+  background: rgb(255 255 255 / 4%);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-pill);
+  background: var(--glass-surface);
+  box-shadow: inset 0 1px 0 var(--glass-rim);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.pill__dot {
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--status-available);
+  box-shadow: 0 0 10px var(--status-available);
+}
+
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--accent-bright);
+  font-weight: 600;
+  transition: transform var(--dur-instant) var(--ease-out);
+}
+
+/* press feedback: existe em touch, onde :hover não existe */
+.link-arrow:active {
+  transform: scale(0.97);
+}
+
+.link-arrow svg {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  /* transform em vez de gap: compositor, não layout */
+  transition: transform var(--dur) var(--ease-in-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link-arrow:hover svg {
+    transform: translateX(var(--space-1));
+  }
+}
+
+/* ============================================================
+   ASSETS DE FUNDO
+   Cada seção tem o seu, derivado do próprio conteúdo.
+   Regra: no máximo um foco luminoso por dobra.
+   ============================================================ */
+.bloom {
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  background: var(--accent-deep);
+  filter: blur(180px);
+  opacity: 0.3;
+  pointer-events: none;
+  will-change: transform;
+  animation: breathe 8s linear infinite alternate;
+}
+
+@keyframes breathe {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.06);
+  }
+}
+
+/* blueprint: a grade que sustenta a página, literal.
+   Um único elemento com gradientes — não 40 divs. */
+.blueprint {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgb(168 85 247 / 4.5%) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(168 85 247 / 4.5%) 1px, transparent 1px),
+    linear-gradient(to right, rgb(168 85 247 / 9%) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(168 85 247 / 9%) 1px, transparent 1px);
+  background-size:
+    64px 64px,
+    64px 64px,
+    256px 256px,
+    256px 256px;
+  mask-image: radial-gradient(ellipse 100% 80% at 30% 40%, #000 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 100% 80% at 30% 40%, #000 30%, transparent 100%);
+}
+
+.blueprint__node {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 14px rgb(168 85 247 / 80%);
+  animation: node-pulse var(--node-dur, 3s) linear infinite alternate;
+}
+
+/* Rastro do cursor: mesmo ponto dos nós fixos, aceso ao atravessar um cruzamento.
+   Posição e ciclo de vida vêm do JS via Web Animations API — aqui só a aparência.
+   Deliberadamente sem `filter`: o glow é do `box-shadow`, que não borra o que está
+   atrás nem força re-rasterização por frame. */
+.blueprint__spark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  /* centraliza no cruzamento em vez de pendurar a partir dele */
+  margin: -3.5px 0 0 -3.5px;
+  border-radius: 50%;
+  /* Núcleo sólido até 40% e borda que desvanece: um disco de borda dura tem um
+     degrau de opacidade que chama atenção para o instante de aparecer, mesmo com
+     a curva temporal correta. O diâmetro sobe de 5 para 7px porque a parte
+     translúcida não conta como massa visível — o núcleo continua com ~5px. */
+  background: radial-gradient(
+    circle,
+    var(--accent) 0%,
+    var(--accent) 40%,
+    color-mix(in srgb, var(--accent) 55%, transparent) 70%,
+    transparent 100%
+  );
+  box-shadow: 0 0 14px rgb(168 85 247 / 70%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes node-pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+
+  to {
+    transform: scale(1.4);
+    opacity: 1;
+  }
+}
+
+/* ondas de sinal: o contato saindo */
+.signal {
+  position: absolute;
+  z-index: -1;
+  top: var(--signal-y, 50%);
+  left: var(--signal-x, 50%);
+  border: 1px solid rgb(168 85 247 / var(--signal-op, 15%));
+  border-radius: 50%;
+  translate: -50% -50%;
+  pointer-events: none;
+  animation: signal-pulse 4s linear infinite;
+  animation-delay: var(--signal-delay, 0s);
+}
+
+@keyframes signal-pulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   REVEAL
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(24px);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    filter var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+.nav {
+  position: fixed;
+  z-index: 50;
+  top: var(--space-5);
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  width: max-content;
+  max-width: calc(100% - (2 * var(--gutter)));
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-pill);
+  translate: -50% 0;
+  box-shadow:
+    inset 0 1px 0 var(--glass-rim),
+    0 8px 40px -8px rgb(0 0 0 / 60%);
+}
+
+.monogram {
+  display: grid;
+  width: var(--space-8);
+  height: var(--space-8);
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  /* único elemento sólido do sistema: âncora de marca */
+  background: var(--accent);
+  color: var(--text-on-accent);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.nav__links {
+  display: flex;
+  gap: var(--space-7, 28px);
+}
+
+.nav__links a {
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  transition: color var(--dur-fast) var(--ease-hover);
+}
+
+.nav__links a:hover,
+.nav__links a[aria-current="page"] {
+  color: var(--text-primary);
+}
+
+.nav .btn {
+  padding: var(--space-2) var(--space-4);
+  font-size: 14px;
+}
+
+.nav__menu {
+  display: none;
+  width: 44px;
+  height: 44px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: 0;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-pill);
+  background: var(--glass-surface);
+  transition: transform var(--dur-instant) var(--ease-out);
+}
+
+.nav__menu:active {
+  transform: scale(0.97);
+}
+
+.nav__menu span {
+  width: 16px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--text-primary);
+  transition: transform var(--dur) var(--ease-in-out);
+}
+
+.nav__menu[aria-expanded="true"] span:first-child {
+  transform: translateY(3px) rotate(45deg);
+}
+
+.nav__menu[aria-expanded="true"] span:last-child {
+  transform: translateY(-3px) rotate(-45deg);
+}
+
+.nav__overlay {
+  position: fixed;
+  z-index: 49;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  visibility: hidden;
+  background: rgb(8 7 12 / 92%);
+  opacity: 0;
+  /* 16px fica sob o teto de 20px e é indistinguível a 92% de opacidade */
+  backdrop-filter: blur(16px);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    visibility var(--dur-slow) var(--ease-out);
+}
+
+.nav__overlay[data-open="true"] {
+  visibility: visible;
+  opacity: 1;
+}
+
+.nav__overlay nav {
+  display: grid;
+  gap: var(--space-6);
+  text-align: center;
+}
+
+.nav__overlay a {
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(24px);
+  /* O stagger vem de `--link-delay` (custom property setada no componente)
+     e não de `style.transitionDelay`: inline style venceria qualquer regra
+     daqui e deixaria o press dos links atrasado junto com a entrada. */
+  transition:
+    opacity var(--dur-slow) var(--ease-out) var(--link-delay, 0ms),
+    transform var(--dur-slow) var(--ease-out) var(--link-delay, 0ms);
+}
+
+.nav__overlay a:active {
+  /* o press nunca espera o stagger */
+  transform: translateY(0) scale(0.97);
+  transition-delay: 0s;
+  transition-duration: 60ms;
+}
+
+.nav__overlay[data-open="true"] a {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* compõe com o translateY do estado aberto; `transform` já está na
+   lista de transition acima, só a duração precisa encurtar no press */
+
+
+/* ============================================================
+   FOOTER + PÁGINAS LEGAIS
+   ============================================================ */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.footer__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.footer .monogram {
+  width: var(--space-6);
+  height: var(--space-6);
+  font-size: 10px;
+}
+
+.footer__colophon {
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.legal {
+  display: grid;
+  align-content: center;
+  gap: var(--space-4);
+  min-height: 100svh;
+  max-width: var(--measure);
+  padding-block: var(--space-24);
+}
+
+.legal h1 {
+  font-size: var(--fs-h2);
+}
+
+.legal p {
+  color: var(--text-secondary);
+}
+
+.text-link {
+  display: inline-flex;
+  margin-bottom: var(--space-6);
+  color: var(--accent-bright);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+@media (max-width: 900px) {
+  .section-head {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    align-items: start;
+  }
+}
+
+@media (max-width: 720px) {
+  :root {
+    --gutter: var(--space-5);
+  }
+
+  .nav {
+    width: calc(100% - (2 * var(--gutter)));
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .nav__links,
+  /* no mobile o CTA vive dentro do menu — o hamburger assume o lugar */
+  .nav__cta {
+    display: none;
+  }
+
+  .nav__menu {
+    display: flex;
+  }
+
+  .footer {
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .footer__colophon {
+    width: 100%;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION — assets param, conteúdo permanece
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* movimento sai; cor e opacidade continuam comunicando estado.
+     Trocar `transition-property` em vez de zerar a duração é o ponto:
+     transform/filter saltam direto, cor resolve em 180ms. */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-property: opacity, color, background-color, border-color, box-shadow !important;
+    transition-duration: var(--dur-fast) !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+
+  .bloom,
+  .blueprint__node,
+  .blueprint__spark,
+  .signal {
+    animation: none;
+    /* sem animação, a camada promovida não se paga */
+    will-change: auto;
+  }
+
+  /* o único movimento que sobrevivia ao interruptor geral */
+  .writing__post:hover .writing__title {
+    transform: none;
+  }
+}

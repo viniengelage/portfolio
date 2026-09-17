@@ -1,0 +1,713 @@
+/* ============================================================
+   HERO
+   Coluna editorial larga + painel técnico estreito.
+   O texto é o protagonista — nada de cena decorativa roubando espaço.
+   ============================================================ */
+.hero {
+  padding-top: clamp(140px, 16vw, 200px);
+  padding-bottom: clamp(var(--space-16), 10vw, 140px);
+  overflow: hidden;
+}
+
+.hero__bloom {
+  top: 12%;
+  left: -4%;
+  width: min(700px, 90vw);
+  height: 420px;
+}
+
+.hero__grid {
+  display: grid;
+  gap: var(--space-24);
+  grid-template-columns: 720fr 384fr;
+  align-items: start;
+}
+
+.hero__copy {
+  display: grid;
+  gap: var(--space-8);
+  justify-items: start;
+}
+
+.hero__title {
+  font-size: var(--fs-display);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+}
+
+/* Linha de posicionamento: pertence ao bloco do nome, por isso a margem curta
+   aqui em vez do gap de 32px que o .hero__copy aplica entre seus irmãos. */
+.hero__tagline {
+  max-width: 640px;
+  margin-top: var(--space-4);
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-size: var(--fs-subtitle);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+/* Instrument Serif tem métrica bem diferente da Inter Tight:
+   sem o ajuste de tamanho a palavra "respira" fica pequena. */
+.hero__tagline .editorial {
+  font-size: 1.06em;
+}
+
+.hero__lead {
+  max-width: 600px;
+  color: var(--text-secondary);
+  font-size: var(--fs-lead);
+  line-height: 1.65;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.hero__stats {
+  display: grid;
+  gap: var(--space-10);
+  grid-auto-flow: column;
+  justify-content: start;
+  margin: 0;
+}
+
+.hero__stats dt {
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.hero__stats dd {
+  max-width: 150px;
+  margin: var(--space-1) 0 0;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+/* --- painel técnico: o contraponto de dados ao editorial */
+.panel {
+  padding: var(--space-6);
+  border-radius: var(--radius-card);
+}
+
+.panel__rows {
+  margin: var(--space-5) 0 0;
+}
+
+.panel__row {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 64px 1fr;
+  padding-block: var(--space-3);
+}
+
+.panel__row + .panel__row {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.panel__row dt {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.panel__row dd {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+/* ============================================================
+   SELECTED WORK
+   ============================================================ */
+.work__disclaimer {
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.work__list {
+  display: grid;
+  gap: var(--space-6);
+  margin-top: var(--space-16);
+}
+
+.project {
+  display: grid;
+  grid-template-columns: 480fr 720fr;
+  overflow: hidden;
+  border-radius: var(--radius-panel);
+  transition:
+    border-color var(--dur) var(--ease-hover),
+    box-shadow var(--dur) var(--ease-hover);
+}
+
+.project--reverse {
+  grid-template-columns: 720fr 480fr;
+}
+
+.project--reverse .project__visual {
+  order: 2;
+}
+
+.project:hover {
+  border-color: rgb(255 255 255 / 16%);
+  box-shadow:
+    inset 0 1px 0 var(--glass-rim),
+    0 0 48px -12px color-mix(in srgb, var(--project-accent) 30%, transparent);
+}
+
+.project__visual {
+  position: relative;
+  overflow: hidden;
+  /* tinge a área com o accent do projeto — é o que diferencia os três */
+  background: color-mix(in srgb, var(--project-accent) 6%, transparent);
+}
+
+.project__copy {
+  display: grid;
+  align-content: center;
+  gap: var(--space-6);
+  padding: var(--space-12);
+}
+
+.project__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.project__mark {
+  color: var(--project-accent);
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.project__copy h3 {
+  font-size: clamp(26px, 2.8vw, 38px);
+  line-height: 1.12;
+}
+
+.project__description {
+  max-width: 600px;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.project__role {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.project__role p:last-child {
+  max-width: 600px;
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.project__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.project__link {
+  color: var(--project-accent);
+  transition: transform var(--dur-instant) var(--ease-out);
+}
+
+.project__link:active {
+  transform: scale(0.97);
+}
+
+/* ============================================================
+   TIMELINE
+   Eixo hairline com nós. A régua marca o tempo entre os marcos.
+   ============================================================ */
+.timeline {
+  position: relative;
+  margin-top: var(--space-16);
+  /* 132 do ano + 24 até o centro do nó */
+  --axis-x: 156px;
+}
+
+/* eixo + régua num único elemento */
+.timeline::before {
+  position: absolute;
+  z-index: 0;
+  top: var(--space-2);
+  bottom: var(--space-2);
+  left: var(--axis-x);
+  width: 1px;
+  content: "";
+  background: var(--border-strong);
+}
+
+.timeline::after {
+  position: absolute;
+  z-index: 0;
+  top: var(--space-2);
+  bottom: var(--space-2);
+  left: calc(var(--axis-x) - 22px);
+  width: 14px;
+  content: "";
+  /* ticks a cada 24px, maiores a cada 5º */
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      rgb(168 85 247 / 12%) 0 1px,
+      transparent 1px 24px
+    );
+  mask-image: linear-gradient(to right, transparent 0, #000 50%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 50%);
+}
+
+.timeline__item {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-areas: "year node content";
+  grid-template-columns: 132px 48px 1fr;
+  align-items: start;
+}
+
+.timeline__year {
+  grid-area: year;
+  padding-top: 4px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+
+.timeline__item--now .timeline__year {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.timeline__node {
+  grid-area: node;
+}
+
+.timeline__content {
+  grid-area: content;
+}
+
+.timeline__item:not(:last-child) .timeline__content {
+  padding-bottom: var(--space-12);
+}
+
+.timeline__node {
+  position: relative;
+  display: grid;
+  height: 24px;
+  place-items: center;
+}
+
+.timeline__node {
+  grid-area: node;
+}
+
+.timeline__dot {
+  width: var(--space-2);
+  height: var(--space-2);
+  border: 2px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--bg-base);
+}
+
+.timeline__item--now .timeline__dot {
+  width: 12px;
+  height: 12px;
+  border: 0;
+  background: var(--accent);
+  box-shadow: 0 0 20px rgb(168 85 247 / 85%);
+}
+
+/* ecos do "agora" */
+.timeline__echo {
+  position: absolute;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  opacity: 0;
+  animation: echo 3s linear infinite;
+  animation-delay: calc(var(--echo) * 1s);
+  inline-size: 24px;
+  block-size: 24px;
+}
+
+@keyframes echo {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+
+.timeline__content {
+  display: grid;
+  gap: var(--space-3);
+  padding-top: 2px;
+}
+
+.timeline__content h3 {
+  font-size: 24px;
+  line-height: 1.25;
+}
+
+.timeline__org {
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.timeline__description {
+  max-width: 720px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.timeline__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+
+/* ============================================================
+   WRITING
+   ============================================================ */
+.writing {
+  position: relative;
+  overflow: hidden;
+}
+
+.writing__pilcrow {
+  position: absolute;
+  z-index: -1;
+  right: -40px;
+  bottom: -80px;
+  color: var(--accent);
+  font-size: 260px;
+  line-height: 1;
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+.writing__ghost {
+  position: absolute;
+  z-index: -1;
+  bottom: var(--space-10);
+  left: var(--gutter);
+  display: grid;
+  gap: var(--space-4);
+  width: min(340px, 40vw);
+  pointer-events: none;
+}
+
+.writing__ghost span {
+  width: var(--w);
+  height: 6px;
+  border-radius: 3px;
+  background: var(--accent);
+  opacity: 0.05;
+}
+
+.writing__list {
+  margin-top: var(--space-12);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.writing__post {
+  display: grid;
+  gap: var(--space-8);
+  grid-template-columns: 112px 1fr auto;
+  align-items: center;
+  padding-block: var(--space-7, 28px);
+  border-bottom: 1px solid var(--border-subtle);
+  transition:
+    background var(--dur) var(--ease-hover),
+    transform var(--dur-instant) var(--ease-out);
+}
+
+.writing__post:hover {
+  background: rgb(255 255 255 / 2%);
+}
+
+.writing__post:active {
+  transform: scale(0.97);
+}
+
+.writing__date,
+.writing__read {
+  color: var(--text-muted);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.writing__title {
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-size: clamp(19px, 2vw, 26px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  transition:
+    color var(--dur) var(--ease-hover),
+    transform var(--dur) var(--ease-in-out);
+}
+
+.writing__post:hover .writing__title {
+  color: var(--text-primary);
+}
+
+/* cor pode mudar em touch sem prejuízo; só o deslocamento precisa de gate,
+   senão gruda no tap até outro elemento ser tocado */
+@media (hover: hover) and (pointer: fine) {
+  .writing__post:hover .writing__title {
+    transform: translateX(var(--space-2));
+  }
+}
+
+.writing__all {
+  margin-top: var(--space-10);
+}
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.contact {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: var(--space-10);
+}
+
+.contact__bloom {
+  top: -18%;
+  left: 24%;
+  width: min(900px, 96vw);
+  height: 460px;
+  opacity: 0.26;
+}
+
+.contact__signals {
+  position: absolute;
+  z-index: -1;
+  top: 58%;
+  left: clamp(var(--gutter), 22%, 380px);
+  pointer-events: none;
+}
+
+.contact__inner {
+  display: grid;
+  gap: var(--space-6);
+  justify-items: start;
+}
+
+.contact__title {
+  font-size: clamp(32px, 5vw, 60px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.06;
+}
+
+.contact__title .editorial {
+  font-size: 1.04em;
+}
+
+.contact__lead {
+  max-width: 640px;
+  color: var(--text-secondary);
+  font-size: var(--fs-lead);
+}
+
+.contact__email {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+  padding: var(--space-5) var(--space-6);
+  border: 1px solid rgb(192 132 252 / 38%);
+  border-radius: 14px;
+  background: var(--glass-accent);
+  box-shadow:
+    inset 0 1px 0 var(--glass-rim),
+    0 0 40px -10px rgb(168 85 247 / 40%);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(17px, 2vw, 24px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  transition:
+    background var(--dur) var(--ease-hover),
+    box-shadow var(--dur) var(--ease-hover),
+    transform var(--dur-instant) var(--ease-out);
+}
+
+.contact__email:active {
+  transform: scale(0.97);
+}
+
+.contact__email:hover {
+  background: rgb(168 85 247 / 24%);
+  box-shadow:
+    inset 0 1px 0 var(--glass-rim),
+    0 0 56px -8px rgb(168 85 247 / 60%);
+}
+
+/* o sinal responde ao interesse */
+.contact:has(.contact__email:hover) .signal {
+  animation-duration: 1.6s;
+  border-color: rgb(168 85 247 / 30%);
+}
+
+.contact__socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  margin-top: var(--space-2);
+}
+
+.contact__socials a {
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 500;
+  transition: color var(--dur-fast) var(--ease-hover);
+}
+
+.contact__socials a:hover {
+  color: var(--text-primary);
+}
+
+.contact .footer {
+  width: 100%;
+  margin-top: var(--space-12);
+}
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+@media (max-width: 1080px) {
+  .hero__grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+
+  .hero__aside {
+    width: 100%;
+  }
+
+  .project,
+  .project--reverse {
+    grid-template-columns: 1fr;
+  }
+
+  .project--reverse .project__visual {
+    order: 0;
+  }
+
+  .project__copy {
+    padding: var(--space-8);
+  }
+}
+
+@media (max-width: 720px) {
+  .hero__stats {
+    gap: var(--space-4);
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .hero__stats dd {
+    max-width: none;
+    font-size: 10px;
+  }
+
+  /* o ano vira label acima do título: a coluna lateral
+     consumiria 38% da largura em 390px */
+  .timeline {
+    --axis-x: 16px;
+  }
+
+  /* o ano sobe para o lado do nó e o conteúdo alinha por baixo dele */
+  .timeline__item {
+    grid-template-areas:
+      "node year"
+      ".    content";
+    grid-template-columns: 32px 1fr;
+  }
+
+  .timeline__year {
+    padding-top: 2px;
+    font-size: 11px;
+  }
+
+  .timeline__content {
+    padding-top: var(--space-2);
+  }
+
+  .timeline__content h3 {
+    font-size: 21px;
+  }
+
+  .timeline__org {
+    font-size: 14px;
+  }
+
+  /* data e tempo sobem para cima do título: não cabem 3 colunas em 390px */
+  .writing__post {
+    gap: var(--space-2) var(--space-3);
+    grid-template-columns: auto auto 1fr;
+  }
+
+  .writing__date {
+    grid-area: 1 / 1;
+  }
+
+  .writing__read {
+    grid-area: 1 / 2;
+  }
+
+  .writing__title {
+    grid-area: 2 / 1 / 3 / 4;
+  }
+
+  .writing__pilcrow {
+    font-size: 180px;
+  }
+
+  .writing__ghost {
+    display: none;
+  }
+
+  .contact__signals {
+    left: 50%;
+  }
+}
