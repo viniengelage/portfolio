@@ -1,5 +1,6 @@
 import { Contact } from "../components/sections/contact";
 import { Hero } from "../components/sections/hero";
+import { Lab } from "../components/sections/lab";
 import { Timeline } from "../components/sections/timeline";
 import { Work } from "../components/sections/work";
 import { Writing } from "../components/sections/writing";
@@ -15,6 +16,7 @@ export default function Home() {
       <main id="conteudo">
         <Hero />
         <Work />
+        <Lab />
         <Timeline />
         <Writing />
         <Contact />

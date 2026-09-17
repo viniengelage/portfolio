@@ -1,0 +1,255 @@
+/* ============================================================
+   LADO B — projetos pequenos
+   Continua a faixa elevada de `<Work />` em vez de abrir uma dobra
+   própria: a hierarquia vem do head menor e do label cinza.
+   ============================================================ */
+
+/* A seção anterior já fecha com uma borda inferior. Somada ao filete
+   interno daqui, dariam duas linhas a 128px uma da outra. */
+.band--raised:has(+ .lab) {
+  border-bottom: 0;
+}
+
+.lab {
+  position: relative;
+  padding-bottom: clamp(var(--space-20), 9vw, var(--space-32));
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-raised);
+  isolation: isolate;
+}
+
+.lab__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.lab__divider {
+  height: 1px;
+  background: var(--border-subtle);
+}
+
+.lab__head {
+  margin-top: var(--space-16);
+}
+
+/* Subordinado ao `Produtos que estão no ar`, que usa --fs-h2. */
+.lab__head h2 {
+  font-size: var(--fs-subtitle);
+}
+
+.lab__note {
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* --- grade ------------------------------------------------- */
+.lab__list {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: var(--space-16);
+}
+
+.lab__list > * {
+  min-width: 0;
+}
+
+/* Com um item só, meio card ao lado de meio vazio leria como conteúdo
+   faltando. Ele ocupa a linha inteira e vira horizontal até chegar o segundo. */
+.lab__list[data-count="1"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.lab__list[data-count="1"] .lab-card {
+  grid-template-rows: auto;
+  grid-template-columns: 420fr 780fr;
+}
+
+/* --- card -------------------------------------------------- */
+.lab-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-panel);
+  transition:
+    border-color var(--dur) var(--ease-hover),
+    box-shadow var(--dur) var(--ease-hover);
+}
+
+.lab-card:hover {
+  border-color: rgb(255 255 255 / 16%);
+  box-shadow:
+    inset 0 1px 0 var(--glass-rim),
+    0 0 48px -12px color-mix(in srgb, var(--project-accent) 30%, transparent);
+}
+
+.lab-card__thumb {
+  position: relative;
+  min-height: 160px;
+  overflow: hidden;
+  background: var(--ink-900);
+}
+
+/* Foco luminoso em gradiente, não em blur: um blur recortado pela quina
+   do card deixa uma borda reta visível. */
+.lab-card__thumb::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: radial-gradient(
+    58% 118% at 18% 50%,
+    color-mix(in srgb, var(--accent-deep) 42%, transparent) 0%,
+    transparent 72%
+  );
+}
+
+.lab-card__body {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  padding: var(--space-8);
+}
+
+.lab-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.lab-card__mark {
+  color: var(--text-primary);
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.lab-card__body h3 {
+  font-size: clamp(20px, 1.9vw, 24px);
+  line-height: 1.2;
+}
+
+.lab-card__description {
+  max-width: 56ch;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.lab-card__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.lab-card__link {
+  justify-self: start;
+  min-height: 32px;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.lab-card__link:hover {
+  color: var(--accent-bright);
+}
+
+/* ============================================================
+   MINIATURA DO POLAR DARK
+   ============================================================ */
+.polar-thumb {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 176px minmax(0, 1fr);
+  height: 100%;
+  min-height: 160px;
+}
+
+.polar-thumb__star {
+  width: 56px;
+  height: 67px;
+  justify-self: center;
+  fill: var(--text-primary);
+}
+
+.polar-thumb__code {
+  margin: 0;
+  padding-right: var(--space-6);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.polar-thumb__line {
+  display: block;
+  white-space: pre;
+}
+
+.polar-thumb__key {
+  color: var(--blue-400);
+  font-weight: 400;
+}
+
+.polar-thumb__punct {
+  color: var(--ink-400);
+  font-style: normal;
+}
+
+.polar-thumb__value {
+  font-weight: 400;
+}
+
+.polar-thumb__value[data-tone="teal"] { color: var(--teal-400); }
+.polar-thumb__value[data-tone="violet"] { color: var(--violet-400); }
+.polar-thumb__value[data-tone="amber"] { color: var(--amber-400); }
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+@media (max-width: 900px) {
+  .lab__list,
+  .lab__list[data-count="1"] .lab-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lab__list[data-count="1"] .lab-card {
+    grid-template-rows: auto 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .lab__head {
+    margin-top: var(--space-12);
+  }
+
+  .lab__list {
+    margin-top: var(--space-10);
+  }
+
+  .lab-card__body {
+    padding: var(--space-6);
+  }
+
+  /* Alvo de toque: 44px é o mínimo. */
+  .lab-card__link {
+    min-height: 44px;
+  }
+
+  .polar-thumb {
+    grid-template-columns: 116px minmax(0, 1fr);
+  }
+
+  .polar-thumb__star {
+    width: 44px;
+    height: 53px;
+  }
+
+  .polar-thumb__code {
+    font-size: 10px;
+  }
+}

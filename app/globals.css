@@ -1,6 +1,8 @@
 @import "./styles/home.css";
+@import "./styles/lab.css";
 @import "./styles/mockups.css";
 @import "./styles/blog.css";
+@import "./styles/theme.css";
 
 /* ============================================================
    TOKENS — espelham penpot.library.local.tokens

@@ -1,0 +1,289 @@
+/* ============================================================
+   PÁGINA DO TEMA (/polar-dark)
+   Mesmos tokens do resto do site. A única liberdade é a prévia,
+   que sobrescreve `--code-*` para pintar com o Polar Dark em vez do
+   Bloom Dark (ver `lib/polar-dark.ts`).
+   ============================================================ */
+
+/* --- 1. cabeçalho ------------------------------------------ */
+.theme-hero {
+  padding-top: clamp(var(--space-24), 12vw, var(--space-32));
+  overflow: hidden;
+}
+
+.theme-hero__bloom {
+  top: -10%;
+  left: calc(var(--content-inset) - 120px);
+  width: min(620px, 88vw);
+  height: 380px;
+}
+
+.theme-hero__label {
+  margin-top: var(--space-10);
+}
+
+.theme-hero__title {
+  margin-top: var(--space-4);
+  font-size: var(--fs-display);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+}
+
+.theme-hero__lead {
+  max-width: var(--measure);
+  margin-top: var(--space-6);
+  color: var(--text-secondary);
+  font-size: 21px;
+  line-height: 1.55;
+}
+
+.theme-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+  color: var(--text-muted);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.theme-hero__meta li + li::before {
+  margin-right: var(--space-3);
+  content: "·";
+}
+
+.theme-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+
+/* --- 2. prévia ---------------------------------------------- */
+.theme-preview__frame {
+  /* o mesmo halo dos mockups: separa a janela do fundo da faixa */
+  box-shadow:
+    0 30px 72px -24px rgb(0 0 0 / 80%),
+    0 0 64px -28px var(--violet-800);
+  border-radius: var(--radius-card);
+}
+
+.theme-preview__caption {
+  margin-top: var(--space-4);
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* --- 3. paleta ---------------------------------------------- */
+.pal-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
+  margin-top: var(--space-16);
+}
+
+.pal-card {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  border-radius: var(--radius-card);
+}
+
+.pal-card__chip {
+  height: 44px;
+  margin-bottom: var(--space-2);
+  border-radius: var(--space-2);
+  /* o rim evita que as cores claras sangrem no fundo do card */
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 24%);
+}
+
+.pal-card__name {
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.pal-card__hex {
+  color: var(--text-muted);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+.pal-card__carries {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.pal-card__origin {
+  margin-top: var(--space-1);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.pal-surfaces {
+  margin-top: var(--space-16);
+}
+
+.pal-surfaces ul {
+  margin-top: var(--space-6);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.pal-surfaces li {
+  display: grid;
+  align-items: center;
+  gap: var(--space-4);
+  grid-template-columns: 24px 88px 1fr;
+  padding-block: var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.pal-surfaces__chip {
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+}
+
+.pal-surfaces b {
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.pal-surfaces span:last-child {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* --- 4. decisões -------------------------------------------- */
+.decision-list {
+  display: grid;
+  gap: var(--space-8);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: var(--space-16);
+}
+
+.decision-list > li {
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border-strong);
+}
+
+.decision__index {
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+}
+
+.decision-list h3 {
+  margin-top: var(--space-4);
+  font-size: 19px;
+  line-height: 1.25;
+}
+
+.decision__body {
+  margin-top: var(--space-3);
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+/* --- 5. instalação ------------------------------------------ */
+.install-grid {
+  display: grid;
+  gap: var(--space-8);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: var(--space-16);
+}
+
+.install > * + * {
+  margin-top: var(--space-4);
+}
+
+.install h3 {
+  font-size: 21px;
+}
+
+.install__lead,
+.install__foot {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.install__foot {
+  color: var(--text-muted);
+}
+
+.install strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.install kbd {
+  display: inline-block;
+  min-width: 22px;
+  padding: 2px var(--space-2);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--glass-surface);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-align: center;
+}
+
+.theme-foot {
+  max-width: var(--measure);
+  margin-top: var(--space-16);
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* --- responsivo --------------------------------------------- */
+@media (max-width: 900px) {
+  .decision-list,
+  .install-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .decision-list {
+    gap: var(--space-6);
+  }
+}
+
+@media (max-width: 720px) {
+  .theme-hero__lead {
+    font-size: 19px;
+  }
+
+  .pal-grid,
+  .decision-list,
+  .install-grid {
+    margin-top: var(--space-10);
+  }
+
+  .pal-surfaces li {
+    grid-template-columns: 24px 1fr;
+    grid-template-areas:
+      "chip hex"
+      "use  use";
+    row-gap: var(--space-2);
+  }
+
+  .pal-surfaces__chip { grid-area: chip; }
+  .pal-surfaces b { grid-area: hex; }
+  .pal-surfaces span:last-child { grid-area: use; }
+}
