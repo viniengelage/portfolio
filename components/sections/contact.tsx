@@ -42,13 +42,14 @@ export function Contact() {
 
         <Reveal delay={80}>
           <h2 className="contact__title">
-            Vamos construir algo que <em className="editorial">respire</em>
+            Vamos conversar sobre o próximo <em className="editorial">produto</em>
           </h2>
         </Reveal>
 
         <Reveal delay={160}>
           <p className="contact__lead">
-            Aberto a projetos de produto — app, web ou design system. Respondo em até um dia útil.
+            Estou disponível para projetos de produto, seja app, web ou design system. Respondo em
+            até um dia útil.
           </p>
         </Reveal>
 

@@ -12,11 +12,12 @@ import {
 
 const title = "Polar Dark";
 const description =
-  "Tema escuro para Zed e VS Code com as cores do design system deste portfólio. Onze cores de sintaxe, cada uma com uma origem declarada.";
+  "Tema escuro para Zed e VS Code feito para o meu uso diário. Uma paleta baseada na minha identidade visual, com contraste para ler código por horas.";
 
 export const metadata: Metadata = {
   title,
   description,
+  alternates: { canonical: "/polar-dark" },
   openGraph: { title, description, url: "/polar-dark", type: "website" },
   twitter: { card: "summary_large_image", title, description },
 };
@@ -49,7 +50,7 @@ const VSCODE_INSTALL = `code --install-extension ${POLAR_DARK.vscode.extensionId
 const decisions = [
   {
     title: "#08070C em vez de preto puro",
-    body: "Preto absoluto borra em painel OLED. E a escada de elevação corre para dentro: o editor é a superfície mais funda, a moldura fica por cima dele — o contrário do que a maioria dos temas faz.",
+    body: "Preto absoluto borra em painel OLED. A escada de elevação corre para dentro: o editor é a superfície mais funda e a moldura fica por cima dele. A maioria dos temas faz o contrário.",
   },
   {
     title: "Um violeta que nenhum token usa",
@@ -82,9 +83,9 @@ export default function PolarDarkPage() {
             <h1 className="theme-hero__title">{POLAR_DARK.name}</h1>
 
             <p className="theme-hero__lead">
-              As cores deste site, dentro do editor. Um tema escuro para Zed e VS Code cuja paleta de
-              sintaxe saiu de um design system em uso — cada cor tem origem, nenhuma foi escolhida
-              isolada.
+              Tema escuro que fiz para usar todos os dias no Zed e depois levei ao VS Code. A paleta
+              parte da minha identidade visual e foi ajustada para deixar o código confortável de ler
+              por horas.
             </p>
 
             <ul className="theme-hero__meta mono">
@@ -132,12 +133,12 @@ export default function PolarDarkPage() {
             <Reveal className="section-head">
               <div className="section-head__title">
                 <p className="label">Paleta</p>
-                <h2 id="paleta">Onze cores, cada uma com um motivo</h2>
+                <h2 id="paleta">Uma paleta para passar o dia no editor</h2>
               </div>
               <div className="section-head__aside">
                 <p>
-                  Três delas são os acentos dos produtos que estão no ar. Ler código neste tema é ler
-                  as mesmas cores do resto do portfólio.
+                  O violeta é o ponto de partida. Azul, teal e âmbar criam contraste suficiente para
+                  distinguir o código sem transformar a tela numa coleção de cores soltas.
                 </p>
               </div>
             </Reveal>
@@ -185,7 +186,7 @@ export default function PolarDarkPage() {
             <Reveal className="section-head">
               <div className="section-head__title">
                 <p className="label">Decisões</p>
-                <h2 id="decisoes">O que não é óbvio</h2>
+                <h2 id="decisoes">Escolhas para o uso diário</h2>
               </div>
             </Reveal>
 
@@ -215,7 +216,7 @@ export default function PolarDarkPage() {
               <div className="install">
                 <h3>Zed</h3>
                 <p className="install__lead">
-                  O Zed lê arquivos de tema na hora — não precisa reiniciar.
+                  O Zed lê arquivos de tema na hora, sem precisar reiniciar.
                 </p>
                 <CodeBlock code={ZED_INSTALL} lang="sh" filename="Zed" />
                 <p className="install__foot">

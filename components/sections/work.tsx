@@ -1,7 +1,6 @@
 import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { BussolaMockup } from "../mockups/bussola";
 import { OrganizadinMockup } from "../mockups/organizadin";
-import { PolarDarkMockup } from "../mockups/polar-dark";
 import { TrixMockup } from "../mockups/trix";
 import { Reveal } from "../reveal";
 
@@ -21,25 +20,12 @@ type Project = {
 
 const projects: Project[] = [
   {
-    mark: "Polar Dark",
-    period: "open source",
-    accent: "var(--accent)",
-    title: "Um tema escuro feito para deixar o código respirar",
-    description:
-      "Tema para VS Code e Zed construído a partir de um sistema de design real. Cinco cores de sintaxe, superfícies com viés violeta e a rampa ANSI completa mantêm o editor focado no código.",
-    role: "Direção visual · Mapeamento de tokens de interface e sintaxe · Port para VS Code e Zed",
-    stack: ["VS Code", "Zed", "JSON", "Design system"],
-    url: "github.com/viniengelage/polaris-theme",
-    href: "https://github.com/viniengelage/polaris-theme",
-    mockup: <PolarDarkMockup />,
-  },
-  {
     mark: "Organizadin",
     period: "em produção",
     accent: "var(--accent-organizadin)",
     title: "O mês inteiro organizado, sem planilha",
     description:
-      "App de organização financeira pessoal para iOS e Android. Contas, cartões, limites, assinaturas e lembretes num lugar só — com Open Finance importando o extrato e relatórios que explicam o mês em texto.",
+      "App de organização financeira pessoal para iOS e Android. Reúne contas, cartões, limites, assinaturas e lembretes. O Open Finance importa o extrato, e os relatórios explicam o mês em texto.",
     role: "Planejamento, design e desenvolvimento completo do produto · Design system · App, backend e integração Open Finance",
     stack: ["React Native", "TypeScript", "Node", "Open Finance"],
     url: "organizadin.com",
@@ -52,7 +38,7 @@ const projects: Project[] = [
     accent: "var(--accent-bussola)",
     title: "Um método para decidir com clareza",
     description:
-      "Não é um chat de IA — é um método de sete passos que usa a IA como espelho. Separa fato de narrativa, medo de verdade, e termina sempre numa ação mínima concreta. Com check-in diário e termômetro de padrões.",
+      "Método de sete passos que usa a IA como espelho para apoiar decisões. Ajuda a separar fato de narrativa e medo de verdade, depois termina em uma ação mínima concreta. Também inclui check-in diário e termômetro de padrões.",
     role: "Design de produto e interface · Arquitetura da conversa · Frontend e integração com LLM",
     stack: ["React", "TypeScript", "Node", "LLM"],
     url: "bussola.vc",
@@ -66,7 +52,7 @@ const projects: Project[] = [
     accent: "var(--accent-trix)",
     title: "Viver de renda, em cinco cliques",
     description:
-      "App de investimentos em fundos imobiliários e ações da gestora TRX. Carteiras prontas montadas por especialistas, aporte a partir de R$ 150 e DARF automático — incluindo o Trix Kids, conta de investimento para menores.",
+      "App da gestora TRX para investir em fundos imobiliários e ações. Tem carteiras montadas por especialistas, aporte a partir de R$ 150 e DARF automático. Inclui o Trix Kids, uma conta de investimento para menores.",
     role: "Desenvolvedor principal · Migração da arquitetura legada para Expo com atualizações OTA · Reescrita do serviço de API · Criação e adoção do novo design system",
     stack: ["React Native", "TypeScript", "Fintech", "CVM"],
     url: "trix.com.br",
@@ -86,8 +72,7 @@ export function Work() {
           </div>
           <div className="section-head__aside">
             <p className="mono work__disclaimer">
-              As telas são recriações ilustrativas feitas para este portfólio — não são capturas dos
-              produtos.
+              As telas são recriações ilustrativas feitas para este portfólio, não capturas dos produtos.
             </p>
           </div>
         </Reveal>

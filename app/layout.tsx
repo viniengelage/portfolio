@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Inter, Inter_Tight, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -38,12 +39,16 @@ const editorial = Instrument_Serif({
 
 const title = "Vinicios Engelage — Full stack, app & interface";
 const description =
-  "Desenvolvedor full stack com especialidade em aplicativos e design de interface. Construo produtos do schema do banco ao detalhe de animação.";
+  "Desenvolvedor full stack especializado em aplicativos e design de interface. Trabalho do schema do banco à animação da tela.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.viniengelage.com"),
   title: { default: title, template: "%s | Vinicios Engelage" },
   description,
+  applicationName: "Vinicios Engelage",
+  alternates: { canonical: "/" },
+  authors: [{ name: "Vinicios Engelage", url: "https://www.viniengelage.com" }],
+  creator: "Vinicios Engelage",
   openGraph: {
     title,
     description,
@@ -52,7 +57,12 @@ export const metadata: Metadata = {
     locale: "pt_BR",
     type: "website",
   },
-  twitter: { card: "summary_large_image", title, description },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -61,7 +71,30 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       lang="pt-BR"
       className={`${body.variable} ${display.variable} ${mono.variable} ${editorial.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <Script
+          id="person-schema"
+          type="application/ld+json"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: "Vinicios Engelage",
+              url: "https://www.viniengelage.com",
+              image: "https://www.viniengelage.com/profile.png",
+              jobTitle: "Desenvolvedor full stack",
+              email: "oi@viniengelage.com",
+              sameAs: [
+                "https://github.com/viniengelage",
+                "https://www.linkedin.com/in/viniengelage/",
+                "https://instagram.com/viniengelage",
+              ],
+            }).replace(/</g, "\\u003c"),
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Copy } from "@phosphor-icons/react/dist/ssr";
+import { CheckIcon, CopyIcon } from "@phosphor-icons/react/dist/ssr";
 import { useEffect, useRef, useState } from "react";
 
 /** Ilha client isolada: o resto do `<CodeBlock>` continua Server Component. */
@@ -29,7 +29,7 @@ export function CopyButton({ value, label = "Copiar código" }: { value: string;
       data-copied={copied}
       aria-label={copied ? "Copiado" : label}
     >
-      {copied ? <Check weight="bold" aria-hidden="true" /> : <Copy weight="bold" aria-hidden="true" />}
+      {copied ? <CheckIcon weight="bold" aria-hidden="true" /> : <CopyIcon weight="bold" aria-hidden="true" />}
       <span className="copy-button__text" aria-hidden="true">{copied ? "Copiado" : "Copiar"}</span>
     </button>
   );

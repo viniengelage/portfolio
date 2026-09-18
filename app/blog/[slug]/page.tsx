@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight } from "@phosphor-icons/react/dist/ssr";
-import { RenderContent } from "../../../components/blog/render-content";
+import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
+
 import { ShareLinks } from "../../../components/blog/share-links";
 import { TableOfContents } from "../../../components/blog/table-of-contents";
 import {
@@ -29,6 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: post.title,
     description: post.lead,
+    alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
       title: post.title,
       description: post.lead,
@@ -48,10 +49,39 @@ export default async function BlogPostPage({ params }: PageProps) {
   if (!post) notFound();
 
   const { previous, next } = getAdjacentPosts(post.slug);
+  const PostContent = post.Content;
   const url = `${SITE_URL}/blog/${post.slug}`;
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.lead,
+    datePublished: post.date,
+    url,
+    inLanguage: "pt-BR",
+    author: {
+      "@type": "Person",
+      name: AUTHOR.name,
+      url: SITE_URL,
+    },
+    publisher: {
+      "@type": "Person",
+      name: AUTHOR.name,
+      url: SITE_URL,
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
+    },
+    keywords: post.tags.join(", "),
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }}
+      />
       <a className="skip-link" href="#post-body">
         Pular para o conteúdo
       </a>
@@ -60,7 +90,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         <header className="post-header">
           <div className="shell">
             <Link href="/blog" className="post-back">
-              <ArrowLeft weight="bold" aria-hidden="true" /> Voltar para o blog
+              <ArrowLeftIcon weight="bold" aria-hidden="true" /> Voltar para o blog
             </Link>
 
             <p className="post-meta post-meta--accent">
@@ -106,7 +136,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           </aside>
 
           <article className="post-body" id="post-body">
-            <RenderContent content={post.content} />
+            <PostContent />
 
             <footer className="post-footer">
               <div className="post-footer__row">
@@ -151,7 +181,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 {previous ? (
                   <Link href={`/blog/${previous.slug}`} className="post-nav__card" data-direction="previous">
                     <span className="post-nav__label">
-                      <ArrowLeft weight="bold" aria-hidden="true" /> Anterior
+                      <ArrowLeftIcon weight="bold" aria-hidden="true" /> Anterior
                     </span>
                     <span className="post-nav__title">{previous.title}</span>
                   </Link>
@@ -162,7 +192,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 {next ? (
                   <Link href={`/blog/${next.slug}`} className="post-nav__card" data-direction="next">
                     <span className="post-nav__label">
-                      Próximo <ArrowRight weight="bold" aria-hidden="true" />
+                      Próximo <ArrowRightIcon weight="bold" aria-hidden="true" />
                     </span>
                     <span className="post-nav__title">{next.title}</span>
                   </Link>

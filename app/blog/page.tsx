@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { CodeBlock } from "../../components/blog/code-block";
 import { PostCard } from "../../components/blog/post-card";
 import { TagFilter } from "../../components/blog/tag-filter";
@@ -10,7 +10,7 @@ import {
   getAllPosts,
   getAllTags,
   getFeaturedPost,
-  type ContentNode,
+  type CodePreview,
   type Post,
 } from "../../lib/posts";
 
@@ -21,14 +21,14 @@ const description =
 export const metadata: Metadata = {
   title,
   description,
+  alternates: { canonical: "/blog" },
   openGraph: { title, description, url: "/blog", type: "website" },
+  twitter: { card: "summary_large_image", title, description },
 };
 
-type CodeNode = Extract<ContentNode, { type: "code" }>;
-
-/** O "thumbnail" do post em destaque é um bloco de código real do próprio post. */
-function firstCodeNode(post: Post): CodeNode | undefined {
-  return post.content.find((node): node is CodeNode => node.type === "code");
+/** O "thumbnail" do post em destaque é o primeiro bloco de código do MDX. */
+function firstCodeNode(post: Post): CodePreview | undefined {
+  return post.previewCode;
 }
 
 /* ------------------------------------------------------------------ */
@@ -97,7 +97,7 @@ function Feed({ activeTag }: { activeTag?: string }) {
               </ul>
 
               <span className="link-arrow feature__cta">
-                Ler o post <ArrowRight weight="bold" aria-hidden="true" />
+                Ler o post <ArrowRightIcon weight="bold" aria-hidden="true" />
               </span>
             </div>
           </article>
@@ -111,7 +111,7 @@ function Feed({ activeTag }: { activeTag?: string }) {
           </div>
         ) : (
           <p className="blog-empty">
-            PLACEHOLDER — Nenhum post com essa tag ainda.{" "}
+            Nenhum post com essa tag ainda.
             <Link href="/blog" className="prose-a">
               Ver tudo
             </Link>
@@ -148,22 +148,22 @@ export default function BlogIndexPage({
       <main className="blog">
         <section className="band blog-hero">
           <div className="shell band__inner">
-            <p className="label">Escrita</p>
+            <Link href="/" className="post-back blog-hero__back">
+              <ArrowLeftIcon weight="bold" aria-hidden="true" /> Voltar para o início
+            </Link>
+            <p className="label">Blog</p>
             <h1 className="blog-hero__title">
-              Notas de quem <span className="editorial">constrói</span>
+              Compartilhando <span className="editorial">aprendizados</span>
             </h1>
             <p className="blog-hero__lead">
-              PLACEHOLDER — Registro do que aprendo construindo produto de verdade: decisões de
-              interface, arquitetura que aguenta manutenção e os detalhes que só aparecem depois do
-              deploy.
+              Escrevo sobre o que acertei, errei e aprendi durante esses anos corrigindo bugs, desenhando sistemas e melhorando código.
             </p>
           </div>
         </section>
 
         <section className="band band--raised blog-list" aria-label="Posts">
           <div className="shell band__inner">
-            {/* Cache Components: o fallback é a listagem completa estática,
-                então a rota pinta na hora e só troca se houver `?tag=`. */}
+            {/* O fallback é a listagem completa, que só muda quando houver `?tag=`. */}
             <Suspense fallback={<Feed />}>
               <FilteredFeed searchParams={searchParams} />
             </Suspense>

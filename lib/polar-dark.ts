@@ -1,5 +1,5 @@
 /**
- * POLAR DARK — o tema de editor derivado da paleta deste portfólio.
+ * POLAR DARK — tema de editor baseado na identidade visual de Vinicios Engelage.
  *
  * Fonte de verdade: github.com/viniengelage/polaris-theme
  *   Zed      `themes/polar-dark.json`
@@ -36,7 +36,7 @@ export type Swatch = {
   name: string;
   /** O que a cor carrega no editor. */
   carries: string;
-  /** De onde ela veio no design system — vazio quando não tem origem no site. */
+  /** Referência visual ou razão de uso da cor. */
   origin?: string;
 };
 
@@ -45,55 +45,55 @@ export const polarDarkSyntax: Swatch[] = [
     hex: "#C084FC",
     name: "Violeta",
     carries: "palavras-chave, tags JSX e HTML, código inline em markdown",
-    origin: "acento da marca",
+    origin: "violeta principal da identidade visual",
   },
   {
     hex: "#D8B4FE",
     name: "Violeta claro",
     carries: "tipos nativos, enums, namespaces, seletores CSS",
-    origin: "acento da marca, um passo acima",
+    origin: "variação clara do violeta principal",
   },
   {
     hex: "#60A5FA",
     name: "Azul",
     carries: "tipos, funções, métodos, texto de link",
-    origin: "acento da Bússola",
+    origin: "contraste frio para símbolos e navegação",
   },
   {
     hex: "#2DD4BF",
     name: "Teal",
     carries: "strings e URIs",
-    origin: "acento do Organizadin",
+    origin: "contraste calmo para conteúdo textual",
   },
   {
     hex: "#E8B368",
     name: "Âmbar",
     carries: "números, booleanos, constantes, atributos JSX e HTML",
-    origin: "acento do Trix",
+    origin: "calor para valores e atributos",
   },
   {
     hex: "#EDEAF5",
     name: "Branco",
     carries: "variáveis, parâmetros (itálico), títulos de markdown",
-    origin: "ink 100",
+    origin: "texto principal",
   },
   {
     hex: "#C7C2D6",
     name: "Cinza claro",
     carries: "texto do editor, propriedades de objeto",
-    origin: "ink 200",
+    origin: "texto de leitura",
   },
   {
     hex: "#837C98",
     name: "Cinza",
     carries: "comentários (itálico), pontuação, inlay hints",
-    origin: "ink 400",
+    origin: "informação secundária",
   },
   {
     hex: "#6D28D9",
     name: "Violeta profundo",
     carries: "véu da linha ativa, foco, texto fantasma da IA",
-    origin: "acento da marca, passo mais fundo",
+    origin: "variação profunda do violeta principal",
   },
   {
     hex: "#BEF264",

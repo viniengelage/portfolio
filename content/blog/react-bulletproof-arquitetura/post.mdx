@@ -1,0 +1,202 @@
+
+## O problema em escalar projetos
+
+Quando um projeto cresce, os arquivos se espalham e fica mais difícil saber onde cada parte deveria ficar. React é uma biblioteca e não define a organização dos arquivos. O Next.js traz convenções, principalmente para rotas, mas não resolve a arquitetura interna da aplicação. Quem está começando, ou vem do HTML puro, muitas vezes não tem uma referência clara para estruturar um projeto que precisa crescer.
+
+Um projeto React costuma começar assim:
+
+```txt
+src/
+├── components/
+│   ├── invoice-list.tsx
+│   ├── invoice-row.tsx
+│   ├── profile-form.tsx
+│   └── ... mais 137 arquivos
+├── hooks/
+│   ├── use-invoices.ts
+│   └── use-profile.ts
+├── services/
+│   ├── invoices.ts
+│   └── profile.ts
+└── utils/
+    └── format-money.ts
+```
+
+Essa abordagem funciona em projetos menores. Quando o domínio cresce, uma funcionalidade acaba espalhada por várias pastas e a manutenção fica mais difícil. O [React Bulletproof](https://github.com/alan2207/bulletproof-react) propõe uma forma de evitar essa dispersão.
+
+## Separando por funcionalidades
+
+A ideia do React Bulletproof é organizar o projeto por funcionalidades. As mesmas responsabilidades continuam existindo, mas ficam próximas do domínio a que pertencem:
+
+```txt
+src/
+├── app/
+├── features/
+│   └── comments/
+│       ├── components/
+│       │   ├── list.tsx
+│       │   └── create-dialog.tsx
+│       ├── hooks/
+│       │   ├── use-comments.ts
+│       │   └── use-create-comment.ts
+│       └── utils/
+│           └── parse-comment.ts
+├── lib/
+├── hooks/
+├── config/
+├── components/
+│   ├── ui/
+│   └── layout/
+├── types/
+└── utils/
+```
+
+A mudança é simples, embora peça disciplina no começo. Em uma loja virtual, produtos, carrinho e checkout podem ser features separadas. Cada uma reúne seus modelos, chamadas de API e utilitários que só fazem sentido naquele contexto.
+
+Essa organização não elimina as pastas compartilhadas. Ela dá a elas uma responsabilidade mais clara: guardar apenas o que é reutilizado por partes diferentes do sistema.
+
+Assim, `lib`, `hooks`, `config`, `components`, `types` e `utils` concentram código compartilhado:
+
+`lib/` -> *Integrações e clientes configurados*: concentra clientes e adaptações de bibliotecas usadas pela aplicação. Aqui podem ficar o cliente HTTP, SDKs de terceiros e outros wrappers de infraestrutura:
+
+```tsx title="src/lib/api.ts"
+import axios from "axios";
+import { config } from "@/config";
+
+export const api = axios.create({
+  baseURL: config.api.url,
+});
+```
+
+O restante da aplicação importa `api`, sem precisar conhecer a configuração do Axios. Isso reduz os pontos de alteração caso a biblioteca ou a configuração do cliente precisem mudar.
+
+`config/` -> *Configurações da aplicação*: centraliza valores usados por serviços e bibliotecas, como URLs, flags e opções da aplicação:
+
+```tsx title="src/config/api.ts"
+import dotenv from "dotenv";
+
+dotenv.config();
+
+export const config = {
+  api: {
+    url: process.env.API_URL,
+  },
+};
+```
+
+`hooks/` -> *Hooks reutilizáveis*: Hooks que resolvem comportamentos genéricos da interface e podem ser usados por qualquer feature. Um bom exemplo é adiar a atualização de um valor enquanto a pessoa digita em uma busca:
+
+```tsx title="src/hooks/use-debounce.ts"
+import { useEffect, useState } from "react";
+
+export function useDebounce<T>(value: T, delay = 300) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+```
+
+Como ele não conhece produtos, comentários ou usuários, esse hook pertence à raiz. Já `use-create-comment` continua em `features/comments/hooks`, pois carrega regras da funcionalidade de comentários.
+
+`types/` -> *Tipos globais*: Tipos que descrevem conceitos compartilhados pelo sistema, e não uma regra de negócio isolada. Um estado assíncrono é um exemplo que pode ser reaproveitado em diferentes telas:
+
+```ts title="src/types/async-state.ts"
+export type AsyncState<T> =
+  | { status: "idle"; data: null; error: null }
+  | { status: "loading"; data: null; error: null }
+  | { status: "success"; data: T; error: null }
+  | { status: "error"; data: null; error: Error };
+```
+
+Já o tipo `Comment` deve ficar em `features/comments/types`, porque só existe no contexto de comentários. Levar tipos de domínio para a raiz cedo demais recria o acoplamento que a organização por features tenta evitar.
+
+`utils/` -> *Utilitários globais*: Funções puras, sem estado e sem dependência de React, que podem ser usadas em vários contextos. Por exemplo, uma função para formatar valores monetários:
+
+```ts title="src/utils/format-currency.ts"
+export function formatCurrency(
+  valueInCents: number,
+  currency = "BRL",
+  locale = "pt-BR",
+) {
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency,
+  }).format(valueInCents / 100);
+}
+```
+
+Essa função pode ser usada em produtos, carrinho e checkout. Já `calculate-comment-score` deve permanecer em `features/comments/utils`, porque seu significado pertence àquela feature.
+
+## Componentes de interface
+
+A interface também precisa de uma fronteira clara. Em vez de concentrar todos os componentes em uma única pasta, `components/` pode ser dividida entre `ui/` e `layout/`:
+
+```txt
+src/components/
+├── ui/
+│   ├── button.tsx
+│   ├── input.tsx
+│   └── dialog.tsx
+└── layout/
+    ├── header.tsx
+    └── profile-avatar.tsx
+```
+
+`components/ui` reúne os componentes de base da aplicação, como botões, inputs, diálogos e outros elementos que podem aparecer em qualquer tela. Eles recebem dados e comportamentos por propriedades, mas não sabem qual feature os está usando:
+
+```tsx title="src/components/ui/button.tsx"
+import type { ComponentProps } from "react";
+
+type ButtonProps = ComponentProps<"button">;
+
+export function Button({ children, ...props }: ButtonProps) {
+  return <button {...props}>{children}</button>;
+}
+```
+
+`components/layout` guarda estruturas visuais compartilhadas. Nesse projeto, entram elementos como o `Header` e o `ProfileAvatar`, que organizam áreas recorrentes da interface sem carregar regras de uma feature específica:
+
+```tsx title="src/components/layout/header.tsx"
+import { ProfileAvatar } from "./profile-avatar";
+
+type HeaderProps = {
+  user: {
+    name: string;
+    avatarUrl?: string;
+  };
+};
+
+export function Header({ user }: HeaderProps) {
+  return (
+    <header>
+      <nav aria-label="Navegação principal">...</nav>
+      <ProfileAvatar name={user.name} src={user.avatarUrl} />
+    </header>
+  );
+}
+```
+
+A separação não depende apenas do nome da pasta. Um componente só deve ir para `components/ui` ou `components/layout` quando for realmente compartilhado e não conhecer regras de domínio. Um formulário de comentário, por exemplo, continua em `features/comments/components`, mesmo que use `Button`, `Input` e `Header`.
+
+## Orquestrando features
+
+Depois de separar as funcionalidades, o `app` reúne o que cada rota precisa exibir. Ele orquestra as features sem concentrar as regras de negócio. Essa separação traz duas consequências úteis:
+
+- Excluir uma feature se aproxima de excluir uma pasta. Quando isso não é possível, existe algum acoplamento que vale investigar.
+- A estrutura também documenta o produto. Quem entra no time pode abrir `src/features/` e identificar os principais domínios da aplicação.
+
+O principal ganho não é eliminar toda duplicação de código. É manter as dependências em uma direção previsível. Uma tela pode compor a feature A e a feature B, mas a feature A não deve importar diretamente a feature B. Quando duas features precisam compartilhar algo, esse código pode ser extraído para uma camada compartilhada ou a composição pode ficar no `app`.
+
+Essas regras não são rígidas por si só. O React Bulletproof oferece uma base para organizar o projeto; o time pode adaptar as convenções à aplicação, desde que mantenha limites de dependência claros.
+
+## Próximos passos
+
+Este texto apresenta o básico do React Bulletproof. A documentação do projeto aprofunda a abordagem e traz exemplos para React com Next.js e Vite. Os mesmos princípios também servem para aplicações em React Native e projetos com outros frameworks que não definem uma arquitetura interna.

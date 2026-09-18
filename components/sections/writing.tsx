@@ -25,7 +25,8 @@ export function Writing() {
           </div>
           <div className="section-head__aside">
             <p>
-              Comecei a escrever para documentar e compartilhar o que aprendi. Acertando ou errando.
+              Escrevo para registrar o que aprendo enquanto trabalho. Às vezes acerto; em outras,
+              descubro onde errei.
             </p>
           </div>
         </Reveal>

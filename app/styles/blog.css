@@ -257,6 +257,10 @@
   padding-block: clamp(var(--space-24), 12vw, var(--space-32)) var(--space-16);
 }
 
+.blog-hero__back {
+  margin-bottom: var(--space-6);
+}
+
 .blog-hero__title {
   margin-top: var(--space-4);
   font-size: clamp(38px, 7vw, 68px);

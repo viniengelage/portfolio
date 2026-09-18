@@ -45,9 +45,8 @@ export function Hero() {
 
           <Reveal delay={160}>
             <p className="hero__lead">
-              Desenvolvedor full stack com especialidade em aplicativos e design de interface.
-              Construo produtos do schema do banco ao detalhe de animação. E cuido especialmente do
-              detalhe.
+              Desenvolvedor full stack especializado em aplicativos e design de interface. Trabalho do
+              schema do banco à animação da tela e presto atenção no detalhe em cada etapa.
             </p>
           </Reveal>
 

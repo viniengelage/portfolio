@@ -31,9 +31,9 @@ const projects: SideProject[] = [
     mark: "Polar Dark",
     kind: "tema para o editor",
     accent: "var(--accent)",
-    title: "As cores deste site, dentro do editor",
+    title: "Meu tema para passar o dia no editor",
     description:
-      "Tema escuro derivado da paleta deste portfólio. 150 chaves de interface e sintaxe no Zed, port para VS Code e licença MIT.",
+      "Tema escuro para Zed e VS Code, baseado na minha identidade visual e ajustado para leitura diária. São 150 chaves de interface e sintaxe, com licença MIT.",
     stack: ["Zed", "VS Code", "JSON", "MIT"],
     href: "/polar-dark",
     cta: "Ver o tema",
@@ -54,7 +54,7 @@ export function Lab() {
           </div>
           <div className="section-head__aside">
             <p className="mono lab__note">
-              Projetos pequenos, sem cliente e sem prazo. Nascem de um incômodo meu.
+              Projetos pequenos, sem cliente ou prazo. Começam com algum incômodo que quero resolver.
             </p>
           </div>
         </Reveal>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Link as LinkIcon, LinkedinLogo, XLogo } from "@phosphor-icons/react/dist/ssr";
+import { CheckIcon, LinkIcon, LinkedinLogoIcon } from "@phosphor-icons/react/dist/ssr";
 import { useEffect, useRef, useState } from "react";
 
 export function ShareLinks({ url, title }: { url: string; title: string }) {
@@ -21,16 +21,11 @@ export function ShareLinks({ url, title }: { url: string; title: string }) {
   }
 
   const shareTargets = [
-    {
-      label: "Compartilhar no X",
-      href: `https://x.com/intent/post?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
-      icon: <XLogo weight="bold" aria-hidden="true" />,
-      text: "X",
-    },
+
     {
       label: "Compartilhar no LinkedIn",
       href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
-      icon: <LinkedinLogo weight="bold" aria-hidden="true" />,
+      icon: <LinkedinLogoIcon weight="bold" aria-hidden="true" />,
       text: "LinkedIn",
     },
   ];
@@ -52,7 +47,7 @@ export function ShareLinks({ url, title }: { url: string; title: string }) {
       ))}
 
       <button type="button" className="share__item" onClick={copyLink} data-copied={copied || undefined}>
-        {copied ? <Check weight="bold" aria-hidden="true" /> : <LinkIcon weight="bold" aria-hidden="true" />}
+        {copied ? <CheckIcon weight="bold" aria-hidden="true" /> : <LinkIcon weight="bold" aria-hidden="true" />}
         <span>{copied ? "Link copiado" : "Copiar link"}</span>
       </button>
     </div>
