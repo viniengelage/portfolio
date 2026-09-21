@@ -1,0 +1,310 @@
+<!doctype html>
+<!--
+  Thumbnail de compartilhamento do post "Como organizar um app React que precisa
+  crescer". Renderize com:
+    bun run brand:og
+
+  Canvas 1200×630 — a medida que Open Graph e Twitter pedem para summary_large_image.
+
+  Este arquivo é a TRADUÇÃO de um board do Penpot
+  (página "07 — Brand / Social", board "og-blog-react-bulletproof-1200x630").
+  As coordenadas abaixo são as mesmas do board, por isso tudo é posicionado em
+  absoluto em vez de fluir: é o que mantém código e design auditáveis um contra o
+  outro. Ao mexer aqui, mexa lá.
+
+  O motivo visual não é decorativo: a árvore de pastas é o próprio assunto do
+  post, e a grade blueprint é a mesma do hero do site ("código que sustenta").
+-->
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: "Inter Tight";
+        font-weight: 600;
+        src: url("./.fonts/InterTight-SemiBold.ttf") format("truetype");
+      }
+      @font-face {
+        font-family: "Inter";
+        font-weight: 400;
+        src: url("./.fonts/Inter-Regular.ttf") format("truetype");
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        font-weight: 400;
+        src: url("./.fonts/JetBrainsMono-Regular.ttf") format("truetype");
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        font-weight: 500;
+        src: url("./.fonts/JetBrainsMono-Medium.ttf") format("truetype");
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        font-weight: 700;
+        src: url("./.fonts/JetBrainsMono-Bold.ttf") format("truetype");
+      }
+      @font-face {
+        font-family: "Instrument Serif";
+        font-style: italic;
+        font-weight: 400;
+        src: url("./.fonts/InstrumentSerif-Italic.ttf") format("truetype");
+      }
+
+      /* mesmos tokens de app/globals.css — a thumb tem que parecer o site */
+      :root {
+        --bg-base: #08070c;
+        --bg-surface: #13111b;
+        --text-primary: #edeaf5;
+        --text-secondary: #9c96ae;
+        --text-muted: #837c98;
+        --ink-200: #c7c2d6;
+        --accent-bright: #c084fc;
+        --violet-300: #d8b4fe;
+        --accent-deep: #6d28d9;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* O Chrome headless não entrega um viewport de exatamente 630px, então o
+         render sai mais alto e é cortado depois. O `sips` só corta pelo CENTRO
+         (ele ignora --cropOffset), por isso a peça é centrada aqui: assim o
+         corte central cai exatamente em cima dela. Mesma tática da capa. */
+      body {
+        display: grid;
+        height: 900px;
+        background: var(--bg-base);
+        place-items: center;
+      }
+
+      .og {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        background: var(--bg-base);
+      }
+
+      /* ---- fundo ---- */
+
+      /* um único foco luminoso na peça, atrás do painel: é a regra de hierarquia
+         do glow do design system */
+      .bloom {
+        position: absolute;
+        inset: 0;
+        /* Elipse, não círculo: no Penpot o gradiente vive no espaço normalizado
+           do shape, então o raio de 0.66 vira 792px na horizontal e 416px na
+           vertical. Com `circle` a luz morria cedo demais na direita. */
+        background: radial-gradient(
+          792px 416px at 864px 265px,
+          rgb(109 40 217 / 42%) 0%,
+          rgb(109 40 217 / 0%) 100%
+        );
+      }
+
+      /* a grade blueprint do hero, célula de 96px */
+      .grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(to right, rgb(255 255 255 / 4%) 1px, transparent 1px),
+          linear-gradient(to bottom, rgb(255 255 255 / 4%) 1px, transparent 1px);
+        background-position: 96px 96px;
+        background-size: 96px 96px;
+      }
+
+      /* ---- coluna da esquerda ---- */
+
+      .mark {
+        position: absolute;
+        top: 72px;
+        left: 72px;
+        height: 40px;
+      }
+
+      .eyebrow {
+        position: absolute;
+        top: 84px;
+        left: 120px;
+        color: var(--accent-bright);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 2.4px;
+        line-height: 1.5;
+      }
+
+      .title {
+        position: absolute;
+        top: 184px;
+        left: 72px;
+        width: 560px;
+        color: var(--text-primary);
+        font-family: "Inter Tight", sans-serif;
+        font-size: 54px;
+        font-weight: 600;
+        /* o Penpot não aceita tracking negativo; no board o aperto vem da Inter
+           Tight, aqui vem do -0.02em. As quebras são fixas para o resultado
+           bater linha a linha com o design. */
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+      }
+
+      .lead {
+        position: absolute;
+        top: 396px;
+        left: 72px;
+        width: 508px;
+        color: var(--text-secondary);
+        font-family: "Inter", sans-serif;
+        font-size: 21px;
+        font-weight: 400;
+        line-height: 1.5;
+      }
+
+      /* ---- painel de vidro: a árvore de pastas ---- */
+
+      .panel {
+        position: absolute;
+        top: 152px;
+        left: 696px;
+        width: 432px;
+        height: 372px;
+        border: 1px solid rgb(255 255 255 / 9%);
+        border-radius: 16px;
+        /* o rim light é o que faz ler como vidro — sem ele vira um retângulo cinza */
+        box-shadow: inset 0 1px 0 rgb(255 255 255 / 14%);
+        background: rgb(19 17 27 / 72%);
+      }
+
+      .panel__head {
+        position: absolute;
+        top: 24px;
+        left: 28px;
+        color: var(--text-muted);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 1.6px;
+        line-height: 1.5;
+      }
+
+      .panel__sep {
+        position: absolute;
+        top: 68px;
+        right: 0;
+        left: 0;
+        height: 1px;
+        background: rgb(255 255 255 / 7%);
+      }
+
+      .tree {
+        position: absolute;
+        top: 92px;
+        left: 28px;
+        /* os glifos da árvore ficam mudos; a cor sobe só nos nomes de pasta */
+        color: var(--text-muted);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 19px;
+        font-weight: 400;
+        line-height: 1.64;
+        white-space: pre;
+      }
+
+      .tree b {
+        color: var(--ink-200);
+        font-weight: 400;
+      }
+
+      /* o eixo da ideia do post: é aqui que o domínio passa a morar */
+      .tree .feature {
+        color: var(--accent-bright);
+        font-weight: 700;
+      }
+
+      .tree .domain {
+        color: var(--violet-300);
+        font-weight: 500;
+      }
+
+      .tree .root {
+        color: var(--ink-200);
+        font-weight: 500;
+      }
+
+      /* ---- rodapé ---- */
+
+      /* a régua continua a aresta de baixo do painel atravessando a coluna da
+         esquerda: é o que alinha as duas metades da composição */
+      .rule {
+        position: absolute;
+        top: 524px;
+        left: 72px;
+        width: 560px;
+        height: 1px;
+        background: rgb(255 255 255 / 10%);
+      }
+
+      .foot {
+        position: absolute;
+        top: 548px;
+        left: 72px;
+        color: var(--text-muted);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        font-weight: 400;
+        letter-spacing: 2.4px;
+        line-height: 1.5;
+      }
+
+      /* acento editorial — o gesto de marca, duas palavras e só */
+      .signature {
+        position: absolute;
+        top: 540px;
+        left: 848px;
+        width: 280px;
+        color: var(--accent-bright);
+        font-family: "Instrument Serif", serif;
+        font-size: 24px;
+        font-style: italic;
+        font-weight: 400;
+        line-height: 1.2;
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="og">
+      <div class="bloom"></div>
+      <div class="grid"></div>
+
+      <img class="mark" src="../public/logo-mark.svg" alt="" />
+      <p class="eyebrow">ARQUITETURA · REACT</p>
+
+      <h1 class="title">Como organizar um<br />app React que precisa<br />crescer</h1>
+
+      <p class="lead">Quando o domínio cresce, uma funcionalidade se espalha por várias pastas.</p>
+
+      <div class="panel">
+        <p class="panel__head">ESTRUTURA POR FUNCIONALIDADE</p>
+        <div class="panel__sep"></div>
+        <div class="tree"><span class="root">src/</span>
+├─ <span class="feature">features/</span>
+│  └─ <span class="domain">comments/</span>
+│     ├─ <b>components/</b>
+│     ├─ <b>hooks/</b>
+│     └─ <b>utils/</b>
+├─ <b>components/</b>
+└─ <b>lib/</b></div>
+      </div>
+
+      <div class="rule"></div>
+      <p class="foot">VINIENGELAGE.COM &nbsp;·&nbsp; BLOG</p>
+      <p class="signature">bulletproof react</p>
+    </div>
+  </body>
+</html>

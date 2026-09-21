@@ -26,6 +26,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const post = getPostBySlug(slug);
   if (!post) return { title: "Post não encontrado" };
 
+  /** Sem thumb própria o Next herda o Open Graph do site, então basta omitir. */
+  const images = post.image
+    ? [{ url: post.image, width: 1200, height: 630, alt: post.title }]
+    : undefined;
+
   return {
     title: post.title,
     description: post.lead,
@@ -38,8 +43,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       publishedTime: post.date,
       authors: [AUTHOR.name],
       tags: post.tags,
+      ...(images ? { images } : {}),
     },
-    twitter: { card: "summary_large_image", title: post.title, description: post.lead },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.lead,
+      ...(images ? { images } : {}),
+    },
   };
 }
 
@@ -59,6 +70,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     datePublished: post.date,
     url,
     inLanguage: "pt-BR",
+    ...(post.image ? { image: `${SITE_URL}${post.image}` } : {}),
     author: {
       "@type": "Person",
       name: AUTHOR.name,

@@ -8,4 +8,5 @@ export const metadata = {
   tags: ["Arquitetura", "React"],
   pattern: "dots",
   accent: "violet",
+  image: "/og/react-bulletproof-arquitetura.jpg",
 } satisfies BlogPostMeta;

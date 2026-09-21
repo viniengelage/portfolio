@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "brand:cover": "bun run brand/render.ts"
+    "brand:cover": "bun run brand/render.ts cover",
+    "brand:og": "bun run brand/render.ts og"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
