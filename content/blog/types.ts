@@ -14,7 +14,7 @@ export type BlogPostMeta = {
   /**
    * Thumbnail de compartilhamento 1200×630, caminho a partir de `public/`.
    * Sem ela o post cai no Open Graph do site (`app/opengraph-image.tsx`).
-   * As peças são desenhadas no Penpot e rasterizadas por `bun run brand:og`.
+   * As peças são desenhadas no Open Pencil e rasterizadas por `bun run brand:og`.
    */
   image?: string;
   featured?: boolean;

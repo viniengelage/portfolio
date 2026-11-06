@@ -4,7 +4,7 @@
  *   bun run brand:cover    capa do LinkedIn, 1584×396
  *   bun run brand:og       thumbnail do post React Bulletproof, 1200×630
  *
- * Cada peça é a tradução de um board do Penpot; o HTML ao lado documenta qual.
+ * Cada peça é a tradução de um frame do Open Pencil; o HTML ao lado documenta qual.
  * As fontes da marca não ficam versionadas — são baixadas do Google Fonts na
  * primeira execução e guardadas em brand/.fonts (ignorado pelo git).
  */

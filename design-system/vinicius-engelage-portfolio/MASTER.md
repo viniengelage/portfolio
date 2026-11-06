@@ -1,7 +1,7 @@
 # Design System — Vinicios Engelage
 
-> Fonte de verdade do portfólio. Espelha os tokens do arquivo Penpot
-> (`penpot.library.local.tokens`, sets `primitives` + `semantic`) e o CSS em
+> Fonte de verdade do portfólio. Espelha as variáveis do arquivo Open Pencil
+> `Portifolio.fig` (coleções `Primitives` + `Semantic`) e o CSS em
 > `app/globals.css`. Ao mudar um valor, mude nos dois.
 
 **Direção:** *Engineering Journal* — rigor de grid e tipografia com uma assinatura própria: o
@@ -86,15 +86,16 @@ Usar com parcimônia — é um tempero, não um tipo de corpo.
 Escala fluida (sem breakpoint): `--fs-display` `clamp(34px, 6.2vw, 68px)` · `--fs-h2`
 `clamp(30px, 4.4vw, 52px)` · `--fs-lead` `clamp(16px, 1.6vw, 19px)`.
 
-> ⚠️ O Penpot **não aceita `letter-spacing` negativo**. No design o tracking apertado vem da
-> escolha da Inter Tight; no CSS use `-0.03em`/`-0.04em` normalmente.
+> ⚠️ Os títulos do arquivo de design estão com `letter-spacing` 0 (herança do Penpot, que não
+> aceitava valor negativo): o tracking apertado vem da escolha da Inter Tight. No CSS use
+> `-0.03em`/`-0.04em` normalmente.
 
 ---
 
 ## Espaçamento e raio
 
 **Grade de 4px, sem exceção.** `--space-1` a `--space-32` (4 → 128px). Qualquer valor fora da
-grade é falha de governança — a auditoria do Penpot pegou 50+ violações ao longo do projeto.
+grade é falha de governança — a auditoria do design pegou 50+ violações ao longo do projeto.
 
 Raio: `--radius-control: 10px` · `--radius-card: 16px` · `--radius-panel: 24px` · `--radius-pill`.
 

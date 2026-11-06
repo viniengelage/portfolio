@@ -5,7 +5,7 @@
 @import "./styles/theme.css";
 
 /* ============================================================
-   TOKENS — espelham penpot.library.local.tokens
+   TOKENS — espelham as variáveis do Open Pencil (Portifolio.fig)
    primitives -> semantic. Não usar primitivo direto em componente.
    ============================================================ */
 :root {
