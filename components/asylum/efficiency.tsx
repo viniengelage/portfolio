@@ -62,8 +62,6 @@ export function AsylumEfficiency({ copy }: { copy: AsylumCopy["efficiency"] }) {
                 width={680}
                 height={436}
                 alt={bench.alt}
-                // no mobile o arquivo é recortado em 4:3 na tabela (CSS)
-                sizes="(max-width: 720px) 140vw, (max-width: 1024px) 90vw, 680px"
               />
             </div>
             <div className="asy-window asy-bench__panel">
@@ -72,7 +70,6 @@ export function AsylumEfficiency({ copy }: { copy: AsylumCopy["efficiency"] }) {
                 width={360}
                 height={292}
                 alt={bench.panelAlt}
-                sizes="(max-width: 720px) 72vw, (max-width: 1024px) 48vw, 360px"
               />
             </div>
           </Reveal>

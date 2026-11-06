@@ -15,7 +15,7 @@ export function AsylumTools({ copy }: { copy: AsylumCopy["tools"] }) {
                 {/* a janela é maior que o card de propósito: o print vaza e é cortado */}
                 <div className="asy-tool__visual" data-tint={card.tint}>
                   <div className="asy-window asy-tool__window">
-                    <Shot name={card.shot} width={640} height={400} alt={card.alt} sizes="640px" />
+                    <Shot name={card.shot} width={640} height={400} alt={card.alt} />
                   </div>
                 </div>
                 <div className="asy-tool__copy">

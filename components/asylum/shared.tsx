@@ -45,7 +45,6 @@ type ShotProps = {
   width: number;
   height: number;
   alt: string;
-  sizes: string;
   /**
    * No mobile, recorta em quadrado no ponto dado (`object-position`) em vez de
    * encolher a janela inteira: um editor em 342px deixa o texto com ~2px.
@@ -54,18 +53,21 @@ type ShotProps = {
   preload?: boolean;
 };
 
-/** 75 (o padrão do Next) borra o texto fino dos prints; precisa estar em `images.qualities`. */
-const SHOT_QUALITY = 90;
-
-export function Shot({ name, width, height, alt, sizes, focus, preload }: ShotProps) {
+/**
+ * `unoptimized` de propósito. O otimizador recodifica em WEBP com perda, e o
+ * subsampling de cor borra o texto colorido da sintaxe; para estes prints de
+ * interface plana o original sem perda já é do mesmo tamanho (50–135 KB) que a
+ * versão reduzida com perda. Sem srcset também some o risco de um `sizes` errado
+ * — a coluna é fluida até 1520px e um `sizes` fixo pedia arquivo pequeno demais.
+ */
+export function Shot({ name, width, height, alt, focus, preload }: ShotProps) {
   return (
     <Image
       src={`/asylum/${name}.webp`}
       width={width}
       height={height}
       alt={alt}
-      sizes={sizes}
-      quality={SHOT_QUALITY}
+      unoptimized
       preload={preload}
       className={focus ? "asy-shot--crop" : undefined}
       style={focus ? ({ "--focus": focus } as React.CSSProperties) : undefined}

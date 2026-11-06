@@ -41,7 +41,6 @@ export function AsylumProfiles({ copy }: { copy: AsylumCopy["profiles"] }) {
             width={640}
             height={400}
             alt={copy.shotAlt}
-            sizes="(max-width: 720px) 160vw, (max-width: 1024px) calc(100vw - 48px), 640px"
             // o seletor de perfis fica no canto inferior esquerdo
             focus="0% 100%"
           />

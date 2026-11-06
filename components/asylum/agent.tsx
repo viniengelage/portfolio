@@ -29,7 +29,6 @@ export function AsylumAgent({ copy }: { copy: AsylumCopy["agent"] }) {
               width={732}
               height={458}
               alt={copy.shotAlt}
-              sizes="(max-width: 720px) 160vw, (max-width: 1024px) calc(100vw - 48px), 732px"
               // o painel do plano, que é o assunto do print
               focus="78% 50%"
             />

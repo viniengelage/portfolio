@@ -57,6 +57,8 @@ Leia do geral para o detalhe. Não puxe a página inteira em profundidade máxim
   arquivo original, não `export_image`: o `.fig` é um zip e cada image fill está em
   `images/<imageHash>` (o hash aparece no `get_jsx` do nó). `unzip` + `cwebp -lossless`.
   O `export_image` reamostra e perde nitidez, e em WEBP falha com "No visible nodes".
+  Sirva com `next/image` `unoptimized`: a recodificação com perda borra texto de
+  interface, e um `sizes` fixo erra numa coluna fluida.
 - A cópia do design é a fonte. Não reescreva texto por conta própria. Se algo parecer errado,
   pergunte.
 

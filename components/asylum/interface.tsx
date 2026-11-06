@@ -28,7 +28,6 @@ export function AsylumInterface({ copy }: { copy: AsylumCopy["interface"] }) {
                     width={384}
                     height={DOCK_HEIGHT[dock.shot] ?? 908}
                     alt={dock.alt}
-                    sizes="(max-width: 900px) 440px, 384px"
                   />
                 </div>
                 <figcaption>
@@ -47,7 +46,6 @@ export function AsylumInterface({ copy }: { copy: AsylumCopy["interface"] }) {
               width={640}
               height={450}
               alt={settings.alt}
-              sizes="(max-width: 720px) 145vw, (max-width: 1024px) calc(100vw - 112px), 640px"
               // a lista de valores com a origem de cada um, sem a barra lateral
               focus="40% 30%"
             />

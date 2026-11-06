@@ -94,8 +94,6 @@ export function AsylumHero({ copy, proof, release }: HeroProps) {
             width={1200}
             height={750}
             alt={copy.shotAlt}
-            // no recorte do mobile a imagem fica 1.6× mais larga que a coluna
-            sizes="(max-width: 720px) 160vw, (max-width: 1248px) calc(100vw - 48px), 1200px"
             // um pouco do código e os dois simuladores: é a frase do título
             focus="80% 50%"
             preload
