@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRightIcon, ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
+import { AsylumThumb } from "../mockups/asylum-thumb";
 import { PolarDarkThumb } from "../mockups/polar-dark-thumb";
 import { Reveal } from "../reveal";
 
@@ -27,6 +28,18 @@ type SideProject = {
 };
 
 const projects: SideProject[] = [
+  {
+    mark: "Asylum",
+    kind: "editor de código",
+    accent: "var(--accent-bright)",
+    title: "O editor que junta as janelas que eu vivia trocando",
+    description:
+      "Fork do Zed com simulador iOS, emulador Android, API, banco e Docker dentro do editor, e um agente que usa tudo isso. Gratuito e open source, em Rust.",
+    stack: ["Rust", "Zed", "Agente de IA", "GPL-3.0"],
+    href: "/asylum",
+    cta: "Ver o Asylum",
+    thumb: <AsylumThumb />,
+  },
   {
     mark: "Polar Dark",
     kind: "tema para o editor",
