@@ -1,4 +1,4 @@
-import { Geist } from "next/font/google";
+import localFont from "next/font/local";
 import { ASYLUM_HTML_LANG, asylumCopy, type AsylumLocale } from "../../content/asylum";
 import { getLatestRelease } from "../../lib/asylum";
 import { AsylumAgent } from "./agent";
@@ -12,10 +12,13 @@ import { AsylumOpenSource } from "./open-source";
 import { AsylumProfiles } from "./profiles";
 import { AsylumTools } from "./tools";
 
-/** Só o wordmark usa Geist; carregada aqui para não pesar no resto do site. */
-const wordmark = Geist({
-  subsets: ["latin"],
-  weight: ["600"],
+/**
+ * Só o wordmark usa Geist; carregada aqui para não pesar no resto do site.
+ * Local pelo mesmo motivo das fontes do layout (ver `app/layout.tsx`).
+ */
+const wordmark = localFont({
+  src: "../../app/fonts/geist-600.woff2",
+  weight: "600",
   variable: "--ff-geist",
   display: "swap",
 });

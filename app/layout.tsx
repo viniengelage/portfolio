@@ -1,38 +1,47 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Inter, Inter_Tight, Instrument_Serif, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
 /**
+ * Fontes servidas do próprio repositório (`app/fonts/`, subconjunto latino),
+ * e não do `next/font/google`: no build da Vercel o Google às vezes devolve
+ * URLs de fonte com query string, e o Turbopack do Next 16.3 quebra com
+ * "next/font/google queries have exactly one entry". Sem rede no build, sem
+ * esse risco. Os arquivos são os WOFF2 do bloco `latin` do CSS do Google Fonts
+ * (todos com licença OFL); para atualizar, baixe de novo de lá.
+ *
  * As variáveis do next/font usam namespace próprio (`--ff-*`).
  * Elas são injetadas no <html>, que é o mesmo elemento de `:root` —
  * se reusassem os nomes semânticos (`--font-display`), o mapeamento em
  * globals.css viraria auto-referência e a fonte nunca resolveria.
  */
-const body = Inter({
-  subsets: ["latin"],
+const body = localFont({
+  src: "./fonts/inter.woff2",
+  weight: "100 900",
   variable: "--ff-inter",
   display: "swap",
 });
 
-const display = Inter_Tight({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
+const display = localFont({
+  src: "./fonts/inter-tight.woff2",
+  weight: "500 700",
   variable: "--ff-inter-tight",
   display: "swap",
 });
 
-const mono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
+const mono = localFont({
+  src: "./fonts/jetbrains-mono.woff2",
+  weight: "400 700",
   variable: "--ff-jetbrains-mono",
   display: "swap",
 });
 
-const editorial = Instrument_Serif({
-  subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
+const editorial = localFont({
+  src: [
+    { path: "./fonts/instrument-serif.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/instrument-serif-italic.woff2", weight: "400", style: "italic" },
+  ],
   variable: "--ff-instrument-serif",
   display: "swap",
 });
