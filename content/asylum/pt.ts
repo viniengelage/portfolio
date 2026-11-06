@@ -41,7 +41,6 @@ export const pt: AsylumCopy = {
     stats: [
       { value: "16", label: "crates próprias em Rust" },
       { value: "~95 mil", label: "linhas novas sobre o Zed" },
-      { value: "158", label: "commits, de um dev só" },
     ],
     versionLabel: "publicada · atualiza sozinha",
   },
@@ -297,11 +296,7 @@ export const pt: AsylumCopy = {
     cta: "Ver o repositório",
     install: {
       label: "instalar · zsh",
-      steps: [
-        "1. baixe a última versão em",
-        "2. macOS: o app ainda não é notarizado",
-        "3. abra e escolha um perfil",
-      ],
+      steps: ["1. baixe a última versão em", "2. abra e escolha um perfil"],
     },
   },
 

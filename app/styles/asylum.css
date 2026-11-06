@@ -324,7 +324,7 @@
 /* números: o rótulo é o termo, o valor vem antes na leitura visual */
 .asy-proof {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-top: var(--space-24);
 }
 
@@ -1121,14 +1121,17 @@
     display: none;
   }
 
+  /* três números cabem numa linha só se o valor encolher um pouco */
   .asy-proof {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    row-gap: var(--space-10);
     margin-top: var(--space-16);
   }
 
-  .asy-proof > div:nth-child(3) {
-    border-left: 0;
+  .asy-proof > div {
+    padding-inline: var(--space-2);
+  }
+
+  .asy-proof dd {
+    font-size: 26px;
   }
 
   .asy-grid--4 {

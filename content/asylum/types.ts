@@ -116,7 +116,7 @@ export type AsylumCopy = {
     cta: string;
     install: {
       label: string;
-      steps: [download: string, quarantine: string, open: string];
+      steps: [download: string, open: string];
     };
   };
 

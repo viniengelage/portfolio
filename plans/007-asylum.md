@@ -20,7 +20,7 @@ Fora do escopo: i18n do resto do site, card do Asylum no "Lado B" (não existe n
 |---|---|---|
 | `nav` (0:582) | nav própria do produto, flutuante | lockup + 4 âncoras + GitHub + Baixar. Ganha um seletor PT/EN, que o design não tem |
 | `section-hero` (0:144) | ícone, pill de versão, h1, lead, CTAs, janela `shot/devices` | grade de 128px a 7% + 3 nós + bloom `violet-700` |
-| `section-proof` (0:188) | 4 números | o último é a versão (`v2.0`), derivada da mesma release |
+| `section-proof` (0:188) | 3 números | o último é a versão (`v2.0`), derivada da mesma release |
 | `section-devices` (0:205) | 3 cards de simulador + faixa de tools do agente | banda elevada |
 | `section-tools` (0:241) | 4 cards com screenshot + 3 mini cards | o screenshot vaza do card (640 de 588) |
 | `section-ui` (0:300) | 3 docks com fade + card de configurações | banda elevada |
@@ -57,8 +57,8 @@ Fora do escopo: i18n do resto do site, card do Asylum no "Lado B" (não existe n
 - **Screenshots:** os PNGs originais saem de dentro do `Portifolio.fig` (é um zip;
   `images/<hash>`, o mesmo hash do image fill de cada `shot/*`) e viram WEBP sem perda
   em `public/asylum/`. Não use `export_image` para isso: ele reamostra o original e
-  perde nitidez. Servidos com `next/image` em `quality={90}` (`images.qualities` em
-  `next.config.ts`), porque o 75 padrão borra o texto fino.
+  perde nitidez. Servidos com `next/image` em `unoptimized`: o original sem perda, sem
+  srcset (ver correção 4).
 - **Mobile:** em até 720px, os prints de janela inteira (hero, agente, perfis,
   configurações) são recortados em quadrado no ponto que importa (`<Shot focus>`),
   em vez de encolhidos. O benchmarks vira 4:3 na tabela, com o painel por cima.
@@ -66,6 +66,10 @@ Fora do escopo: i18n do resto do site, card do Asylum no "Lado B" (não existe n
   porque o texto dela está em português.
 
 ## Depois da entrega
+
+- Revisão do design: a faixa de números perdeu "158 commits, de um dev só" e o bloco
+  de instalação perdeu o passo do `xattr` (app não notarizado); ficaram dois passos.
+  Os ids dos nós mudaram ao reabrir o arquivo: o frame agora é `0:289`, busque pelo nome.
 
 - Card do Asylum no Lado B (`components/sections/lab.tsx`), com `AsylumThumb`.
 - Revisão das imagens no mobile: originais do `.fig`, qualidade 90 e recorte (acima).
@@ -81,6 +85,15 @@ Fora do escopo: i18n do resto do site, card do Asylum no "Lado B" (não existe n
 3. **Especificidade:** `asylum.css` é importado antes das regras de `globals.css`, então
    `.asy-hero` perdia o `padding-block` para `.band` no mobile. Toda sobrescrita de classe
    global agora vai com dois seletores (`.band.asy-hero`, `.asy .asy-nav__github`).
+4. **Prints borrados no ar:** o otimizador do `next/image` estragava as imagens de
+   duas formas. Os `sizes` fixos (`384px` nas docks) assumiam a coluna de 1200px, mas o
+   shell é fluido até 1520px: o navegador pedia arquivo menor que a área e ampliava. E a
+   recodificação em WEBP com perda subamostra a cor, o que borra o texto colorido da
+   sintaxe. Para estes prints de interface plana o original sem perda tem o mesmo peso
+   da versão reduzida (50–135 KB), então `<Shot>` passou a usar `unoptimized` e os
+   `sizes` saíram. Densidade no desktop largo: 2× ou mais em quase tudo; o hero (1.44×)
+   e as configurações (1.74×) ficam abaixo de retina porque os originais do `.fig` têm
+   1728px e 1280px.
 
 ## Verificação
 

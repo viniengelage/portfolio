@@ -11,7 +11,7 @@ type OpenSourceProps = {
 };
 
 export function AsylumOpenSource({ copy, prompt }: OpenSourceProps) {
-  const [download, quarantine, open] = copy.install.steps;
+  const [download, open] = copy.install.steps;
 
   return (
     <section className="band band--raised" id="open-source" aria-labelledby="open-source-title">
@@ -75,11 +75,6 @@ export function AsylumOpenSource({ copy, prompt }: OpenSourceProps) {
                       github.com/{ASYLUM.slug}/releases
                     </a>
                   </span>
-                  {"\n\n"}
-                  <span className="asy-code__c"># {quarantine}</span>
-                  {"\n"}
-                  <span className="asy-code__k">xattr</span> -dr com.apple.quarantine{" "}
-                  <span className="asy-code__s">/Applications/Asylum.app</span>
                   {"\n\n"}
                   <span className="asy-code__c"># {open}</span>
                   {"\n"}
